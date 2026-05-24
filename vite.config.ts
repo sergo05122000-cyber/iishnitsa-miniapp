@@ -6,7 +6,7 @@ export default defineConfig(() => ({
   plugins: [react()],
   base: '/',
   build: {
-    target: 'es2020',  // iOS Safari 14+ baseline
+    target: ['es2017', 'safari11'],  // iOS Telegram WebApp v6.0 WebView baseline
   },
   server: {
     host: '0.0.0.0',
