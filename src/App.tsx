@@ -1,7 +1,5 @@
-import { useEffect, useMemo, useState, lazy, Suspense } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { folders, channelName, channelSubtitle, tgUrlFor, type Folder, type Post } from './data'
-
-const HeroScene = lazy(() => import('./HeroScene'))
 
 type Tab = 'folders' | 'search' | 'saved' | 'settings'
 type View =
@@ -45,58 +43,122 @@ function Header({ title, subtitle, onBack }: { title: string; subtitle?: string;
   )
 }
 
-function FriedEgg({ className = '' }: { className?: string }) {
+function PanScene({ className = '' }: { className?: string }) {
   return (
-    <svg viewBox="0 0 64 64" className={className} aria-hidden="true">
+    <svg viewBox="0 0 360 220" className={className} aria-hidden="true">
       <defs>
-        <radialGradient id="yolk" cx="50%" cy="45%" r="55%">
-          <stop offset="0%" stopColor="#FFE48A" />
+        <radialGradient id="ps-yolk" cx="45%" cy="40%" r="60%">
+          <stop offset="0%" stopColor="#FFE99A" />
           <stop offset="55%" stopColor="#F4B73D" />
-          <stop offset="100%" stopColor="#B5781A" />
+          <stop offset="100%" stopColor="#9C6614" />
         </radialGradient>
-        <radialGradient id="yolkGlow" cx="50%" cy="50%" r="60%">
+        <radialGradient id="ps-yolkGlow" cx="50%" cy="50%" r="60%">
           <stop offset="0%" stopColor="rgba(255,210,122,0.55)" />
           <stop offset="100%" stopColor="rgba(229,178,71,0)" />
         </radialGradient>
-        <filter id="white-blur" x="-30%" y="-30%" width="160%" height="160%">
-          <feGaussianBlur stdDeviation="0.6" />
-        </filter>
+        <linearGradient id="ps-pan" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#1a1208" />
+          <stop offset="100%" stopColor="#060709" />
+        </linearGradient>
+        <linearGradient id="ps-skin" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#3a2a18" />
+          <stop offset="100%" stopColor="#1a120a" />
+        </linearGradient>
       </defs>
-      {/* outer yolk glow */}
-      <circle cx="32" cy="32" r="26" fill="url(#yolkGlow)" className="egg-glow" />
-      {/* белок — рваный овал */}
-      <path
-        d="M14 30 C 10 18, 22 10, 32 12 C 44 9, 56 18, 52 30 C 58 38, 52 50, 40 50 C 32 56, 18 54, 14 44 C 8 40, 9 33, 14 30 Z"
-        fill="#FFF8E4"
-        filter="url(#white-blur)"
-        opacity="0.92"
-      />
-      {/* highlight on white */}
-      <path
-        d="M18 22 C 22 18, 28 18, 30 22"
-        stroke="rgba(255,255,255,0.7)"
-        strokeWidth="1.2"
-        strokeLinecap="round"
-        fill="none"
-      />
-      {/* желток */}
-      <circle cx="32" cy="32" r="11" fill="url(#yolk)" className="egg-yolk" />
-      {/* блик на желтке */}
-      <ellipse cx="28" cy="28" rx="3.2" ry="2" fill="rgba(255,255,255,0.65)" />
+
+      {/* === STEAM (steam-А, -B, -C поднимается из сковороды) === */}
+      <g className="steam-group" stroke="rgba(232,223,200,0.32)" strokeWidth="1.4" fill="none" strokeLinecap="round">
+        <path className="steam steam-a" d="M150 110 C 145 95, 155 85, 150 70 C 145 55, 155 45, 150 30" />
+        <path className="steam steam-b" d="M180 110 C 175 95, 185 85, 180 70 C 175 55, 185 45, 180 30" />
+        <path className="steam steam-c" d="M210 110 C 205 95, 215 85, 210 70 C 205 55, 215 45, 210 30" />
+      </g>
+
+      {/* === PAN + HAND group (мягкое покачивание) === */}
+      <g className="pan-group">
+        {/* HAND — кисть и часть предплечья снизу-справа */}
+        <g className="hand-group">
+          {/* Предплечье уходит за край вправо */}
+          <path
+            d="M310 200 L 360 218 L 360 240 L 295 218 Z"
+            fill="url(#ps-skin)"
+            stroke="rgba(229,178,71,0.55)"
+            strokeWidth="1.4"
+          />
+          {/* Кисть — обхват ручки */}
+          <ellipse cx="295" cy="200" rx="22" ry="14" fill="url(#ps-skin)" stroke="rgba(229,178,71,0.7)" strokeWidth="1.5" />
+          {/* Пальцы — линии-сгибы */}
+          <path d="M278 196 Q 282 192, 290 192" stroke="rgba(229,178,71,0.5)" strokeWidth="1" fill="none" />
+          <path d="M278 200 Q 282 198, 290 198" stroke="rgba(229,178,71,0.5)" strokeWidth="1" fill="none" />
+          <path d="M278 204 Q 282 206, 290 206" stroke="rgba(229,178,71,0.5)" strokeWidth="1" fill="none" />
+          {/* Большой палец сверху ручки */}
+          <path d="M300 188 Q 310 184, 320 188" stroke="rgba(229,178,71,0.7)" strokeWidth="1.4" fill="none" />
+        </g>
+
+        {/* HANDLE — ручка сковороды */}
+        <rect x="222" y="192" width="80" height="14" rx="6" fill="url(#ps-pan)" stroke="rgba(229,178,71,0.85)" strokeWidth="1.6" />
+        {/* Заклёпки */}
+        <circle cx="230" cy="199" r="1.8" fill="#E5B247" opacity="0.7" />
+        <circle cx="244" cy="199" r="1.8" fill="#E5B247" opacity="0.7" />
+
+        {/* PAN — корпус (эллипс сверху, корпус снизу) */}
+        {/* боковая стенка */}
+        <path
+          d="M40 130 Q 40 180, 80 192 L 200 192 Q 240 180, 240 130 Z"
+          fill="url(#ps-pan)"
+          stroke="rgba(229,178,71,0.9)"
+          strokeWidth="1.8"
+        />
+        {/* верхний край (ободок) */}
+        <ellipse cx="140" cy="130" rx="100" ry="22" fill="#0a0805" stroke="rgba(229,178,71,1)" strokeWidth="2.2" className="pan-glow" />
+        {/* внутренний ободок */}
+        <ellipse cx="140" cy="130" rx="92" ry="18" fill="#1a1208" stroke="rgba(229,178,71,0.4)" strokeWidth="0.8" />
+
+        {/* === ЯИЧНИЦА В СКОВОРОДЕ === */}
+        {/* мягкое внешнее сияние */}
+        <ellipse cx="140" cy="132" rx="78" ry="15" fill="url(#ps-yolkGlow)" className="yolk-aura" />
+
+        {/* Белок 1 — большой, неровный */}
+        <path
+          d="M80 132
+             C 75 122, 90 118, 110 122
+             C 120 116, 145 116, 160 122
+             C 180 118, 200 124, 205 134
+             C 210 142, 195 146, 175 144
+             C 160 148, 130 148, 110 144
+             C 90 146, 75 142, 80 132 Z"
+          fill="#FFF8E4"
+          opacity="0.95"
+          stroke="rgba(255,255,255,0.4)"
+          strokeWidth="0.6"
+        />
+
+        {/* Желток */}
+        <ellipse cx="135" cy="130" rx="18" ry="10" fill="url(#ps-yolk)" className="yolk-main" stroke="rgba(229,178,71,0.7)" strokeWidth="0.6" />
+        {/* блик на желтке */}
+        <ellipse cx="128" cy="126" rx="5" ry="2.6" fill="rgba(255,255,255,0.55)" />
+
+        {/* Второй белок поменьше */}
+        <ellipse cx="180" cy="135" rx="16" ry="6" fill="#FFF8E4" opacity="0.85" />
+        <ellipse cx="180" cy="134" rx="6" ry="3.2" fill="url(#ps-yolk)" className="yolk-small" />
+
+        {/* === ПУЗЫРЬКИ (шипит) === */}
+        <g className="bubbles" fill="rgba(255,248,228,0.7)">
+          <circle className="bubble bubble-a" cx="100" cy="140" r="2" />
+          <circle className="bubble bubble-b" cx="160" cy="142" r="1.6" />
+          <circle className="bubble bubble-c" cx="195" cy="138" r="1.4" />
+          <circle className="bubble bubble-d" cx="115" cy="135" r="1.2" />
+          <circle className="bubble bubble-e" cx="170" cy="138" r="1.8" />
+        </g>
+      </g>
     </svg>
   )
 }
 
 function HomeHero({ totalPosts, openCount }: { totalPosts: number; openCount: number }) {
   return (
-    <div className="hero-bg relative px-5 pt-6 pb-4 overflow-hidden" style={{ minHeight: 340 }}>
-      {/* 3D scene background */}
-      <Suspense fallback={null}>
-        <HeroScene />
-      </Suspense>
-
+    <div className="hero-bg relative px-5 pt-6 pb-4 overflow-hidden" style={{ minHeight: 380 }}>
       {/* Top status strip */}
-      <div className="flex items-center justify-between mb-8 text-[9px] font-mono uppercase tracking-[0.2em] text-tg-hint relative z-10">
+      <div className="flex items-center justify-between mb-3 text-[9px] font-mono uppercase tracking-[0.2em] text-tg-hint relative z-10">
         <span className="flex items-center gap-1.5">
           <span className="w-1.5 h-1.5 rounded-full pulse-dot" style={{ background: 'var(--tg-accent)' }} />
           ONLINE
@@ -104,11 +166,11 @@ function HomeHero({ totalPosts, openCount }: { totalPosts: number; openCount: nu
         <span>v0.3.0 · BUILD {new Date().getFullYear()}</span>
       </div>
 
-      {/* Floating яичница — декоративный акцент */}
-      <FriedEgg className="absolute top-12 right-4 w-20 h-20 egg-float z-10" />
+      {/* PAN scene — главный визуальный акцент */}
+      <PanScene className="absolute left-0 right-0 top-8 w-full h-[220px] pointer-events-none z-0" />
 
       {/* Hero title */}
-      <div className="relative z-10">
+      <div className="relative z-10 mt-[200px]">
         <div className="text-tg-hint text-[10px] uppercase tracking-[0.32em] font-mono mb-3 fade-up">приватный клуб</div>
         <h1 className="font-display font-bold text-[40px] leading-none fade-up text-glow-strong"
           style={{ animationDelay: '60ms', color: 'var(--tg-accent)' }}>
@@ -120,7 +182,7 @@ function HomeHero({ totalPosts, openCount }: { totalPosts: number; openCount: nu
       </div>
 
       {/* Stats grid bar */}
-      <div className="relative z-10 mt-8 grid grid-cols-3 gap-3 fade-up" style={{ animationDelay: '200ms' }}>
+      <div className="relative z-10 mt-6 grid grid-cols-3 gap-3 fade-up" style={{ animationDelay: '200ms' }}>
         <StatChip label="Разделов" value={folders.length} />
         <StatChip label="Открыто" value={openCount} accent />
         <StatChip label="Постов" value={totalPosts} />
