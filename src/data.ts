@@ -66,6 +66,34 @@ export const folders: Folder[] = [
     count: 0, accent: 'from-amber-500 to-yellow-500',
     posts: [
       {
+        id: 'kb-content-skills',
+        title: '6 скиллов для контент-маркетинга',
+        excerpt: 'Пакет скиллов для Claude Code: хуки, рилс/шортс, посты в ТГ, контент-план, подписи, переупаковка контента.',
+        date: dayBack(0),
+        type: 'file',
+        pinned: true,
+        fileUrl: asset('files/content-skills.zip'),
+        fileName: 'content-skills.zip',
+        fileSize: '20 KB',
+        body: `Пакет из 6 скиллов под весь цикл создания контента — для блога, ТГ-канала, рилсов, Instagram.
+
+Что внутри:
+1. viral-hook-generator — цепляющие заголовки и первые строки. Боли, провокация, любопытство.
+2. reels-shorts-writer — сценарии для Reels/Shorts/TikTok с хуком в первые 3 секунды.
+3. telegram-post-master — посты для ТГ-каналов под СНГ-аудиторию, правильный ритм и вовлечение.
+4. content-calendar — контент-план на неделю/месяц под нишу и частоту публикаций.
+5. caption-genius — подписи к фото для Instagram, ВК, Threads. Коротко, живо, с характером.
+6. repurpose-engine — берёт одну идею и делает 5-7 форматов: пост, сторис, тезисы для видео, email, цитата.
+
+Как поставить:
+1. Скачай архив по кнопке ниже.
+2. Распакуй (внутри 6 папок).
+3. Скопируй все 6 папок в ~/.claude/skills/ (Mac/Linux) или в .claude/skills/ конкретного проекта.
+4. Скиллы триггерятся автоматически — например напиши "напиши пост в ТГ про X" и подхватится telegram-post-master.
+
+Связка: viral-hook-generator + reels-shorts-writer = готовое короткое видео под рилс. content-calendar + repurpose-engine = месячный план + автоматическая переупаковка под все площадки.`,
+      },
+      {
         id: 'kb-web-design-pro',
         title: 'Скилл web-design-pro для Claude Code',
         excerpt: 'Готовый skill для генерации профессиональных сайтов: 8 дизайн-направлений, AIDA-структура, компоненты и анимации.',
