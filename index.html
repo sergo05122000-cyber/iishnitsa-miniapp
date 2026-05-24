@@ -11,6 +11,34 @@
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <script>
+      // Early error overlay — рисует ошибку прямо на экране, чтобы видеть на iOS WebApp
+      (function () {
+        function show(msg) {
+          var d = document.getElementById('err-overlay') || document.createElement('pre');
+          d.id = 'err-overlay';
+          d.style.cssText = 'position:fixed;inset:0;padding:14px;margin:0;background:#fff;color:#c00;font:11px/1.4 monospace;white-space:pre-wrap;word-break:break-all;z-index:99999;overflow:auto';
+          d.textContent = (d.textContent ? d.textContent + '\n\n' : '') + msg;
+          if (!d.parentNode) document.body.appendChild(d);
+        }
+        window.addEventListener('error', function (e) {
+          show('JS ERROR: ' + (e.message || 'unknown') + '\n@ ' + (e.filename || '?') + ':' + (e.lineno || '?') + '\n\n' + (e.error && e.error.stack ? e.error.stack : ''));
+        });
+        window.addEventListener('unhandledrejection', function (e) {
+          show('PROMISE REJECT: ' + (e.reason && e.reason.stack ? e.reason.stack : (e.reason || 'unknown')));
+        });
+        // Safety net: if root stays empty 4s after load — show diag
+        window.addEventListener('load', function () {
+          setTimeout(function () {
+            var root = document.getElementById('root');
+            if (root && root.innerHTML.trim() === '') {
+              show('ROOT EMPTY after 4s.\nUA: ' + navigator.userAgent + '\nTG: ' + (window.Telegram && window.Telegram.WebApp ? JSON.stringify({v:window.Telegram.WebApp.version, p:window.Telegram.WebApp.platform}) : 'no'));
+            }
+          }, 4000);
+        });
+      })();
+    </script>
   </head>
   <body class="bg-tg-bg text-tg-text">
     <div id="root"></div>

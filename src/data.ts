@@ -22,7 +22,9 @@ export type Folder = {
 }
 const today = new Date()
 const dayBack = (d: number) => new Date(today.getTime() - d*86400000).toLocaleDateString('ru-RU')
-const asset = (p: string) => `${import.meta.env.BASE_URL}${p}`
+// Production base path is hardcoded to avoid import.meta.env.BASE_URL — старый iOS WebKit может не поддерживать import.meta в модулях
+const BASE = '/iishnitsa-miniapp/'
+const asset = (p: string) => `${BASE}${p}`
 
 export const channelName = 'ИИшница'
 export const channelSubtitle = '7 разделов · приватный клуб'
