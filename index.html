@@ -6,14 +6,60 @@
     <title>ИИшница — приватный клуб</title>
     <meta name="description" content="Закрытый клуб про путь из стройки в ИИ. Кейсы, автоматизации, агенты, база знаний." />
 
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <style>
+      /* Inline fallback styles — рендерятся даже если внешний CSS не загрузился */
+      html, body { margin: 0; padding: 0; height: 100%; background: #FBFAF7; color: #0A0A0F; font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif; }
+      #boot { padding: 24px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; gap: 16px; }
+      #boot .title { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
+      #boot .hint { font-size: 13px; color: #6B6F76; text-align: center; max-width: 280px; line-height: 1.5; }
+      #boot .spinner { width: 32px; height: 32px; border: 3px solid rgba(10,10,15,0.1); border-top-color: #2D5BFF; border-radius: 50%; animation: spin 0.8s linear infinite; }
+      @keyframes spin { to { transform: rotate(360deg); } }
+      #err-box { padding: 16px; margin: 12px; background: #fff; border: 1px solid #f0c0c0; border-radius: 12px; color: #c00; font: 11px/1.5 monospace; white-space: pre-wrap; word-break: break-all; }
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <div id="boot">
+        <div class="spinner"></div>
+        <div class="title">ИИшница</div>
+        <div class="hint">Загружаем приватный клуб…</div>
+      </div>
+    </div>
+
+    <script>
+      // Catch any early ESM-module / runtime error and surface it
+      (function () {
+        function fail(msg) {
+          var box = document.createElement('div');
+          box.id = 'err-box';
+          box.textContent = msg;
+          var root = document.getElementById('root');
+          if (root) { root.innerHTML = ''; root.appendChild(box); }
+          else document.body.appendChild(box);
+        }
+        window.addEventListener('error', function (e) {
+          fail('JS ERROR: ' + (e.message || 'unknown') + (e.filename ? '\n@ ' + e.filename + ':' + e.lineno : ''));
+        });
+        window.addEventListener('unhandledrejection', function (e) {
+          fail('PROMISE: ' + (e.reason && e.reason.message ? e.reason.message : (e.reason || 'unknown')));
+        });
+        // If after 8s React не отрисовал — показать причину
+        setTimeout(function () {
+          var root = document.getElementById('root');
+          if (root && root.querySelector('#boot')) {
+            var tg = window.Telegram && window.Telegram.WebApp;
+            fail('Приложение не запустилось за 8 сек.\n\nUA: ' + navigator.userAgent + '\nTG: ' + (tg ? JSON.stringify({v: tg.version, p: tg.platform}) : 'no'));
+          }
+        }, 8000);
+      })();
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  </head>
-  <body class="bg-tg-bg text-tg-text">
-    <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
