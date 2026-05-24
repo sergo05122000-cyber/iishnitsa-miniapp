@@ -330,6 +330,106 @@ function PostRow({ p, index, onOpen }: { p: Post; index: number; onOpen: () => v
   )
 }
 
+function WelcomeGuide({ onOpen }: { onOpen: (id: string) => void }) {
+  const steps = [
+    {
+      n: '01',
+      target: 'intro',
+      title: 'Заполни анкету',
+      sub: 'Имя, город, чем занимаешься, зачем пришёл — раздел «Знакомства».',
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+        </svg>
+      ),
+    },
+    {
+      n: '02',
+      target: 'kb',
+      title: 'Поставь свой первый скилл',
+      sub: 'Раздел «База знаний» — скачай готовый скилл и подключи к Claude Code.',
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+      ),
+    },
+    {
+      n: '03',
+      target: 'qna',
+      title: 'Задай первый вопрос',
+      sub: 'Раздел «Вопросы и разборы». Опиши контекст, что пробовал и где застрял.',
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+      ),
+    },
+  ]
+
+  return (
+    <div className="px-5 pt-6 fade-up" style={{ animationDelay: '260ms' }}>
+      <div className="card relative p-5 overflow-hidden welcome-glow" style={{ background: 'linear-gradient(180deg, rgba(229,178,71,0.06) 0%, var(--tg-sec) 60%)' }}>
+        {/* Header */}
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-tg-hint mb-1">START HERE</div>
+            <h3 className="font-display font-bold text-[18px] uppercase tracking-wide neon-text" style={{ color: 'var(--tg-accent)' }}>
+              С чего начать
+            </h3>
+          </div>
+          <div className="font-mono text-[10px] uppercase tracking-wider text-tg-hint">3 ШАГА</div>
+        </div>
+
+        {/* Шаги */}
+        <div className="flex flex-col gap-2">
+          {steps.map((s) => (
+            <button
+              key={s.n}
+              onClick={() => onOpen(s.target)}
+              className="group flex items-start gap-3 p-3 rounded-lg border text-left active:scale-[0.98] transition-all welcome-step"
+              style={{
+                borderColor: 'rgba(229,178,71,0.18)',
+                background: 'rgba(14,16,20,0.5)',
+              }}
+            >
+              {/* Номер шага */}
+              <div className="shrink-0 font-display font-bold text-[20px] leading-none w-7 tabular-nums neon-text" style={{ color: 'var(--tg-accent)' }}>
+                {s.n}
+              </div>
+              {/* Иконка */}
+              <div className="shrink-0 w-9 h-9 rounded-lg border flex items-center justify-center"
+                style={{
+                  borderColor: 'rgba(229,178,71,0.32)',
+                  background: 'rgba(229,178,71,0.06)',
+                  color: 'var(--tg-accent)',
+                  boxShadow: '0 0 14px rgba(229,178,71,0.08), inset 0 0 10px rgba(229,178,71,0.04)',
+                }}>
+                {s.icon}
+              </div>
+              {/* Текст */}
+              <div className="flex-1 min-w-0">
+                <div className="font-display font-bold text-[13px] uppercase tracking-wide text-tg-text leading-tight">{s.title}</div>
+                <div className="text-tg-hint text-[11px] mt-1 leading-snug">{s.sub}</div>
+              </div>
+              {/* Стрелка */}
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 mt-1" style={{ color: 'var(--tg-accent)' }}>
+                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </button>
+          ))}
+        </div>
+
+        {/* Footer hint */}
+        <div className="mt-4 pt-3 border-t flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.16em] text-tg-hint" style={{ borderColor: 'var(--tg-border)' }}>
+          <span className="w-1.5 h-1.5 rounded-full pulse-dot shrink-0" style={{ background: 'var(--tg-accent)' }} />
+          <span>прошёл всё — пишет жирный кейс в «Кейсы и результаты»</span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function HomeView({ onOpen }: { onOpen: (id: string) => void }) {
   const totalPosts = folders.reduce((s, f) => s + f.posts.length, 0)
   const openCount = folders.filter(f => !f.closed).length
@@ -337,6 +437,7 @@ function HomeView({ onOpen }: { onOpen: (id: string) => void }) {
   return (
     <>
       <HomeHero totalPosts={totalPosts} openCount={openCount} />
+      <WelcomeGuide onOpen={onOpen} />
       <div className="px-5 pt-6 pb-24">
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-display font-bold text-[12px] uppercase tracking-[0.22em]" style={{ color: 'var(--tg-accent)' }}>

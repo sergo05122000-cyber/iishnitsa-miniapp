@@ -95,6 +95,14 @@ body::after {
   position: relative;
 }
 
+/* === Welcome guide card === */
+@keyframes welcomeGlow {
+  0%, 100% { box-shadow: var(--tg-card-shadow), 0 0 0 rgba(229,178,71,0); }
+  50% { box-shadow: var(--tg-card-shadow), 0 0 26px -4px rgba(229,178,71,0.22); }
+}
+.welcome-glow { animation: welcomeGlow 5s ease-in-out infinite; }
+.welcome-step:hover { border-color: rgba(229,178,71,0.42) !important; }
+
 /* === Сцена со сковородой === */
 
 /* рука покачивает сковородку */
