@@ -83,6 +83,11 @@ body::after {
     0 0 22px rgba(229,178,71,0.45),
     0 0 44px rgba(229,178,71,0.22);
 }
+.title-outline {
+  -webkit-text-stroke: 1.2px #FFD27A;
+  text-stroke: 1.2px #FFD27A;
+  paint-order: stroke fill;
+}
 .neon-text {
   text-shadow:
     0 0 6px rgba(229,178,71,0.55),

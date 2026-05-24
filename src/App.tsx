@@ -220,7 +220,7 @@ function HomeHero({ totalPosts, openCount }: { totalPosts: number; openCount: nu
       {/* Hero title */}
       <div className="relative z-10 mt-[200px]">
         <div className="text-tg-hint text-[10px] uppercase tracking-[0.32em] font-mono mb-3 fade-up">приватный клуб</div>
-        <h1 className="font-display text-[52px] leading-[0.92] fade-up text-glow-strong"
+        <h1 className="font-display text-[52px] leading-[0.92] fade-up text-glow-strong title-outline"
           style={{ animationDelay: '60ms', color: 'var(--tg-accent)', letterSpacing: '-0.035em', fontWeight: 800 }}>
           {channelName}
         </h1>
