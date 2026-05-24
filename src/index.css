@@ -2,109 +2,106 @@
 @tailwind components;
 @tailwind utilities;
 
-/* === Ghibli aesthetic palette === */
-:root {
-  --tg-bg: #E9F2FB;       /* sky cream */
-  --tg-sec: #FFFDF7;      /* paper-cream card */
-  --tg-text: #1A2238;     /* deep ink */
-  --tg-hint: #6B7C99;     /* misty blue-grey */
-  --tg-link: #2D5B96;     /* deep sky */
-  --tg-btn: #1A2238;
-  --tg-border: rgba(26,34,56,0.08);
-  --tg-card-shadow: 0 6px 18px -8px rgba(45,91,150,0.18), 0 2px 4px rgba(45,91,150,0.06);
-  --tg-accent: #2D5B96;
-  --tg-accent-soft: #C8DCEF;
-  --tg-warm: #E8A547;     /* golden hour */
-  --tg-warm-soft: #F8E8C8;
-  --tg-rose: #E8746E;     /* sunset peach */
-  --tg-leaf: #6CA876;     /* foliage green */
-  --tg-locked-bg: rgba(26,34,56,0.04);
-  --tg-locked-text: rgba(26,34,56,0.42);
-
-  --sky-1: #B7DCF5;
-  --sky-2: #88C2EE;
-  --sky-3: #5DA9E2;
-}
-.tg-dark {
-  --tg-bg: #0F1A2A;        /* night sky */
-  --tg-sec: #1A2A40;       /* dusk card */
-  --tg-text: #F5EFE0;      /* warm cream */
-  --tg-hint: #8FA5C2;
-  --tg-link: #FCC97A;      /* lantern */
-  --tg-btn: #F5EFE0;
-  --tg-border: rgba(245,239,224,0.10);
-  --tg-card-shadow: 0 8px 22px -8px rgba(0,0,0,0.55), 0 2px 4px rgba(0,0,0,0.3);
-  --tg-accent: #FCC97A;
-  --tg-accent-soft: rgba(252,201,122,0.16);
-  --tg-warm: #FCC97A;
-  --tg-warm-soft: rgba(252,201,122,0.18);
-  --tg-rose: #F0908A;
-  --tg-leaf: #88C49A;
-  --tg-locked-bg: rgba(245,239,224,0.04);
-  --tg-locked-text: rgba(245,239,224,0.35);
-
-  --sky-1: #1F3556;
-  --sky-2: #16263F;
-  --sky-3: #0F1A2A;
+/* === Cinematic Dark Premium — единая тема === */
+:root, .tg-dark {
+  --tg-bg: #060709;          /* deepest void */
+  --tg-sec: #0E1014;         /* card surface */
+  --tg-sec-2: #14171D;       /* elevated surface */
+  --tg-text: #E8DFC8;        /* warm cream */
+  --tg-hint: #7D7A6F;        /* muted gold-grey */
+  --tg-link: #E5B247;        /* warm gold */
+  --tg-btn: #E5B247;
+  --tg-border: rgba(229,178,71,0.10);
+  --tg-border-strong: rgba(229,178,71,0.22);
+  --tg-card-shadow: 0 12px 40px -16px rgba(229,178,71,0.10), 0 1px 0 rgba(255,255,255,0.02) inset;
+  --tg-accent: #E5B247;
+  --tg-accent-bright: #FFD27A;
+  --tg-accent-soft: rgba(229,178,71,0.14);
+  --tg-glow: 0 0 24px rgba(229,178,71,0.35);
+  --tg-glow-soft: 0 0 40px rgba(229,178,71,0.18);
+  --tg-locked-bg: rgba(255,255,255,0.02);
+  --tg-locked-text: rgba(232,223,200,0.30);
 }
 
 html, body, #root { height: 100%; }
 body {
-  font-family: 'Quicksand', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   background: var(--tg-bg);
   color: var(--tg-text);
+  font-feature-settings: "ss01", "cv11";
 }
 
-.font-display { font-family: 'Fraunces', Georgia, serif; letter-spacing: -0.01em; }
-.font-body { font-family: 'Quicksand', sans-serif; }
+/* Subtle grain — добавляет премиум-текстуру */
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.font-display { font-family: 'Space Grotesk', sans-serif; letter-spacing: -0.01em; }
+.font-mono { font-family: 'JetBrains Mono', monospace; }
 
 .card {
   background: var(--tg-sec);
   border: 1px solid var(--tg-border);
-  border-radius: 22px;
+  border-radius: 16px;
   box-shadow: var(--tg-card-shadow);
+  position: relative;
+}
+/* Тонкая золотая линия сверху — luxury detail */
+.card::before {
+  content: '';
+  position: absolute;
+  top: -1px; left: 16px; right: 16px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(229,178,71,0.18), transparent);
+  pointer-events: none;
 }
 .divider { border-color: var(--tg-border); }
 
-/* Hero sky with painterly clouds — pure CSS, no images needed */
-.sky {
+/* Hero topographic background */
+.hero-bg {
   background:
-    radial-gradient(ellipse 80% 60% at 20% 100%, rgba(252,201,122,0.18), transparent 60%),
-    radial-gradient(ellipse 70% 50% at 80% 0%, rgba(255,255,255,0.25), transparent 60%),
-    linear-gradient(180deg, var(--sky-1) 0%, var(--sky-2) 60%, var(--sky-3) 100%);
-  position: relative;
-  overflow: hidden;
+    radial-gradient(ellipse 60% 80% at 50% 100%, rgba(229,178,71,0.22) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(229,178,71,0.06) 0%, transparent 60%),
+    linear-gradient(180deg, #060709 0%, #0A0C10 100%);
+  position: relative; overflow: hidden;
 }
-.sky::before {
+.hero-bg::before {
   content: '';
-  position: absolute; left: -5%; top: 30%;
-  width: 38%; aspect-ratio: 1;
-  background: radial-gradient(circle, #ffffff 0%, #ffffff 55%, transparent 60%);
-  filter: blur(6px); opacity: 0.85;
-  border-radius: 50%;
+  position: absolute; inset: 0;
+  background:
+    repeating-linear-gradient(0deg, transparent 0px, transparent 39px, rgba(229,178,71,0.04) 40px),
+    repeating-linear-gradient(90deg, transparent 0px, transparent 39px, rgba(229,178,71,0.04) 40px);
+  pointer-events: none;
+  mask-image: radial-gradient(ellipse 70% 80% at 50% 50%, black 0%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 80% at 50% 50%, black 0%, transparent 70%);
 }
-.sky::after {
-  content: '';
-  position: absolute; right: 8%; top: 55%;
-  width: 30%; aspect-ratio: 1;
-  background: radial-gradient(circle, #ffffff 0%, #ffffff 55%, transparent 60%);
-  filter: blur(7px); opacity: 0.75;
-  border-radius: 50%;
-}
-.tg-dark .sky::before, .tg-dark .sky::after { opacity: 0.18; background: radial-gradient(circle, #C8DCEF 0%, #C8DCEF 50%, transparent 60%); }
+
+.glow { box-shadow: var(--tg-glow); }
+.glow-soft { box-shadow: var(--tg-glow-soft); }
+.text-glow { text-shadow: 0 0 18px rgba(229,178,71,0.55); }
 
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
 .fade-up { animation: fadeUp 0.5s cubic-bezier(0,0,0.2,1) both; }
 
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-4px); }
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.4); }
 }
-.float-slow { animation: float 5s ease-in-out infinite; }
+.pulse-dot { animation: pulseDot 1.8s ease-in-out infinite; }
+
+@keyframes scanline {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
 
 ::-webkit-scrollbar { width: 0; display: none; }
 * { -webkit-tap-highlight-color: transparent; }
