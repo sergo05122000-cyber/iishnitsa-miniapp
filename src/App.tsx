@@ -45,6 +45,48 @@ function Header({ title, subtitle, onBack }: { title: string; subtitle?: string;
   )
 }
 
+function FriedEgg({ className = '' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 64 64" className={className} aria-hidden="true">
+      <defs>
+        <radialGradient id="yolk" cx="50%" cy="45%" r="55%">
+          <stop offset="0%" stopColor="#FFE48A" />
+          <stop offset="55%" stopColor="#F4B73D" />
+          <stop offset="100%" stopColor="#B5781A" />
+        </radialGradient>
+        <radialGradient id="yolkGlow" cx="50%" cy="50%" r="60%">
+          <stop offset="0%" stopColor="rgba(255,210,122,0.55)" />
+          <stop offset="100%" stopColor="rgba(229,178,71,0)" />
+        </radialGradient>
+        <filter id="white-blur" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="0.6" />
+        </filter>
+      </defs>
+      {/* outer yolk glow */}
+      <circle cx="32" cy="32" r="26" fill="url(#yolkGlow)" className="egg-glow" />
+      {/* белок — рваный овал */}
+      <path
+        d="M14 30 C 10 18, 22 10, 32 12 C 44 9, 56 18, 52 30 C 58 38, 52 50, 40 50 C 32 56, 18 54, 14 44 C 8 40, 9 33, 14 30 Z"
+        fill="#FFF8E4"
+        filter="url(#white-blur)"
+        opacity="0.92"
+      />
+      {/* highlight on white */}
+      <path
+        d="M18 22 C 22 18, 28 18, 30 22"
+        stroke="rgba(255,255,255,0.7)"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+        fill="none"
+      />
+      {/* желток */}
+      <circle cx="32" cy="32" r="11" fill="url(#yolk)" className="egg-yolk" />
+      {/* блик на желтке */}
+      <ellipse cx="28" cy="28" rx="3.2" ry="2" fill="rgba(255,255,255,0.65)" />
+    </svg>
+  )
+}
+
 function HomeHero({ totalPosts, openCount }: { totalPosts: number; openCount: number }) {
   return (
     <div className="hero-bg relative px-5 pt-6 pb-4 overflow-hidden" style={{ minHeight: 340 }}>
@@ -62,10 +104,13 @@ function HomeHero({ totalPosts, openCount }: { totalPosts: number; openCount: nu
         <span>v0.3.0 · BUILD {new Date().getFullYear()}</span>
       </div>
 
+      {/* Floating яичница — декоративный акцент */}
+      <FriedEgg className="absolute top-12 right-4 w-20 h-20 egg-float z-10" />
+
       {/* Hero title */}
       <div className="relative z-10">
         <div className="text-tg-hint text-[10px] uppercase tracking-[0.32em] font-mono mb-3 fade-up">приватный клуб</div>
-        <h1 className="font-display font-bold text-[40px] leading-none fade-up text-glow"
+        <h1 className="font-display font-bold text-[40px] leading-none fade-up text-glow-strong"
           style={{ animationDelay: '60ms', color: 'var(--tg-accent)' }}>
           {channelName}
         </h1>
@@ -86,13 +131,16 @@ function HomeHero({ totalPosts, openCount }: { totalPosts: number; openCount: nu
 
 function StatChip({ label, value, accent }: { label: string; value: number; accent?: boolean }) {
   return (
-    <div className="p-3 rounded-lg border" style={{
+    <div className={`p-3 rounded-lg border ${accent ? 'neon-border' : ''}`} style={{
       background: 'rgba(14,16,20,0.6)',
-      borderColor: accent ? 'rgba(229,178,71,0.32)' : 'var(--tg-border)',
+      borderColor: accent ? 'rgba(229,178,71,0.55)' : 'rgba(229,178,71,0.16)',
       backdropFilter: 'blur(6px)',
+      boxShadow: accent
+        ? '0 0 22px -4px rgba(229,178,71,0.32), inset 0 0 16px rgba(229,178,71,0.05)'
+        : '0 0 14px -6px rgba(229,178,71,0.16), inset 0 0 10px rgba(229,178,71,0.03)',
     }}>
-      <div className="font-display font-bold text-[22px] tabular-nums leading-none"
-        style={{ color: accent ? 'var(--tg-accent)' : 'var(--tg-text)', textShadow: accent ? '0 0 12px rgba(229,178,71,0.45)' : undefined }}>
+      <div className={`font-display font-bold text-[22px] tabular-nums leading-none ${accent ? 'neon-text' : 'neon-text-soft'}`}
+        style={{ color: accent ? 'var(--tg-accent)' : 'var(--tg-text)' }}>
         {value}
       </div>
       <div className="text-tg-hint text-[9px] uppercase tracking-[0.16em] font-mono mt-1.5">{label}</div>

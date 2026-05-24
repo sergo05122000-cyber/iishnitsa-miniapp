@@ -86,6 +86,60 @@ body::after {
 .glow-soft { box-shadow: var(--tg-glow-soft); }
 .text-glow { text-shadow: 0 0 18px rgba(229,178,71,0.55); }
 
+/* === Усиленный неон-стек === */
+.text-glow-strong {
+  text-shadow:
+    0 0 8px rgba(229,178,71,0.65),
+    0 0 22px rgba(229,178,71,0.45),
+    0 0 44px rgba(229,178,71,0.22);
+}
+.neon-text {
+  text-shadow:
+    0 0 6px rgba(229,178,71,0.55),
+    0 0 16px rgba(229,178,71,0.32);
+}
+.neon-text-soft {
+  text-shadow: 0 0 10px rgba(232,223,200,0.18);
+}
+.neon-border {
+  position: relative;
+}
+
+/* === Яичница === */
+@keyframes eggFloat {
+  0%, 100% { transform: translate(0,0) rotate(-6deg); }
+  25% { transform: translate(1px,-3px) rotate(-3deg); }
+  50% { transform: translate(-1px,-1px) rotate(-8deg); }
+  75% { transform: translate(2px,-2px) rotate(-4deg); }
+}
+@keyframes yolkPulse {
+  0%, 100% { transform-origin: center; transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+@keyframes eggGlowPulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+.egg-float { animation: eggFloat 5.5s ease-in-out infinite; filter: drop-shadow(0 0 18px rgba(229,178,71,0.35)); }
+.egg-yolk { transform-box: fill-box; transform-origin: center; animation: yolkPulse 3.2s ease-in-out infinite; }
+.egg-glow { animation: eggGlowPulse 3.2s ease-in-out infinite; }
+
+/* === Hero scanline — раз в 10 сек горизонтальный блик === */
+.hero-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent 45%, rgba(229,178,71,0.18) 50%, transparent 55%);
+  transform: translateY(-110%);
+  animation: heroSweep 10s ease-in-out infinite;
+}
+@keyframes heroSweep {
+  0% { transform: translateY(-110%); }
+  8% { transform: translateY(110%); }
+  100% { transform: translateY(110%); }
+}
+
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
