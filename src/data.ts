@@ -23,11 +23,15 @@ export type Folder = {
   posts: Post[]
 }
 
-// Главный TG-канал клуба. Кнопка "Открыть в Telegram" ведёт сюда, если у поста нет своего tgUrl.
+// Закрытая группа ИИшница — куда ведёт кнопка "Открыть в Telegram"
+export const TG_GROUP_INVITE = 'https://t.me/+rVKsd93z5AQ1MTg6'
+// Канал блога (на случай если когда-то понадобится прямая ссылка на канал)
 export const TG_CHANNEL = 'road_iishnika'
 export const tgUrlFor = (channel?: string, msgId?: string | number) => {
-  const ch = channel || TG_CHANNEL
-  return msgId ? `https://t.me/${ch}/${msgId}` : `https://t.me/${ch}`
+  // Если у поста явно указан channel и msgId — ссылаемся на сообщение в канале.
+  if (channel && msgId) return `https://t.me/${channel}/${msgId}`
+  // По умолчанию — ведём в закрытую группу клуба.
+  return TG_GROUP_INVITE
 }
 const today = new Date()
 const dayBack = (d: number) => new Date(today.getTime() - d*86400000).toLocaleDateString('ru-RU')
