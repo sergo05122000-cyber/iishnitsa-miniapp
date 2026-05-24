@@ -1,10 +1,10 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// Base path: production -> "/iishnitsa-miniapp/" (GitHub Pages subpath), dev -> "/".
-export default defineConfig(({ mode }) => ({
+// Base path: "/" — деплой на Vercel (root домен).
+export default defineConfig(() => ({
   plugins: [react()],
-  base: mode === 'production' ? '/iishnitsa-miniapp/' : '/',
+  base: '/',
   build: {
     target: 'es2020',  // iOS Safari 14+ baseline
   },
