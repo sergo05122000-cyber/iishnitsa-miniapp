@@ -28,18 +28,18 @@ function Header({ title, subtitle, onBack }: { title: string; subtitle?: string;
 function FolderCard({ f, onOpen }: { f: Folder; onOpen: () => void }) {
   return (
     <button onClick={onOpen}
-      className="card w-full text-left p-3 flex items-center gap-3 active:scale-[0.98] transition-transform">
+      className="card relative w-full text-left p-3 flex flex-col gap-2.5 active:scale-[0.97] transition-transform min-h-[140px]">
       <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${f.accent} flex items-center justify-center text-2xl shrink-0`}>
         {f.icon}
       </div>
       <div className="flex-1 min-w-0">
-        <div className="font-medium text-[15px] leading-tight truncate flex items-center gap-1.5">
+        <div className="font-semibold text-[14px] leading-tight flex items-center gap-1">
           {f.title}
           {f.closed && <span className="text-[10px] text-tg-hint">🔒</span>}
         </div>
-        <div className="text-tg-hint text-xs mt-0.5 truncate">{f.subtitle}</div>
+        <div className="text-tg-hint text-[11px] mt-1 leading-snug line-clamp-2">{f.subtitle}</div>
       </div>
-      <div className="text-tg-hint text-xs font-medium tabular-nums px-2 py-1 rounded-full bg-tg-bg/60">
+      <div className="absolute top-2.5 right-2.5 text-tg-hint text-[10px] font-medium tabular-nums px-1.5 py-0.5 rounded-full bg-tg-bg/70">
         {f.posts.length}
       </div>
     </button>
@@ -67,9 +67,11 @@ function HomeView({ onOpen }: { onOpen: (id: string) => void }) {
   return (
     <>
       <Header title={channelName} subtitle={channelSubtitle} />
-      <div className="p-4 space-y-2.5">
-        <div className="text-tg-hint text-[11px] uppercase tracking-wider px-1 pb-1">Разделы</div>
-        {folders.map(f => <FolderCard key={f.id} f={f} onOpen={() => onOpen(f.id)} />)}
+      <div className="p-4">
+        <div className="text-tg-hint text-[11px] uppercase tracking-wider px-1 pb-2">Разделы</div>
+        <div className="grid grid-cols-2 gap-2.5">
+          {folders.map(f => <FolderCard key={f.id} f={f} onOpen={() => onOpen(f.id)} />)}
+        </div>
       </div>
     </>
   )
