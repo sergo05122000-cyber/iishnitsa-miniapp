@@ -2,67 +2,109 @@
 @tailwind components;
 @tailwind utilities;
 
+/* === Ghibli aesthetic palette === */
 :root {
-  --tg-bg: #FBFAF7;
-  --tg-sec: #FFFFFF;
-  --tg-text: #0A0A0F;
-  --tg-hint: #6B6F76;
-  --tg-link: #2D5BFF;
-  --tg-btn: #0A0A0F;
-  --tg-border: rgba(10,10,15,0.08);
-  --tg-card-shadow: 0 1px 2px rgba(10,10,15,0.04);
-  --tg-accent: #2D5BFF;
-  --tg-accent-soft: rgba(45,91,255,0.08);
-  --tg-locked-bg: rgba(10,10,15,0.025);
-  --tg-locked-text: rgba(10,10,15,0.4);
+  --tg-bg: #E9F2FB;       /* sky cream */
+  --tg-sec: #FFFDF7;      /* paper-cream card */
+  --tg-text: #1A2238;     /* deep ink */
+  --tg-hint: #6B7C99;     /* misty blue-grey */
+  --tg-link: #2D5B96;     /* deep sky */
+  --tg-btn: #1A2238;
+  --tg-border: rgba(26,34,56,0.08);
+  --tg-card-shadow: 0 6px 18px -8px rgba(45,91,150,0.18), 0 2px 4px rgba(45,91,150,0.06);
+  --tg-accent: #2D5B96;
+  --tg-accent-soft: #C8DCEF;
+  --tg-warm: #E8A547;     /* golden hour */
+  --tg-warm-soft: #F8E8C8;
+  --tg-rose: #E8746E;     /* sunset peach */
+  --tg-leaf: #6CA876;     /* foliage green */
+  --tg-locked-bg: rgba(26,34,56,0.04);
+  --tg-locked-text: rgba(26,34,56,0.42);
+
+  --sky-1: #B7DCF5;
+  --sky-2: #88C2EE;
+  --sky-3: #5DA9E2;
 }
 .tg-dark {
-  --tg-bg: #0A0A0F;
-  --tg-sec: #15151C;
-  --tg-text: #FFFFFF;
-  --tg-hint: #8B8E96;
-  --tg-link: #6B8DFF;
-  --tg-btn: #FFFFFF;
-  --tg-border: rgba(255,255,255,0.07);
-  --tg-card-shadow: 0 1px 3px rgba(0,0,0,0.5);
-  --tg-accent: #6B8DFF;
-  --tg-accent-soft: rgba(107,141,255,0.12);
-  --tg-locked-bg: rgba(255,255,255,0.025);
-  --tg-locked-text: rgba(255,255,255,0.32);
+  --tg-bg: #0F1A2A;        /* night sky */
+  --tg-sec: #1A2A40;       /* dusk card */
+  --tg-text: #F5EFE0;      /* warm cream */
+  --tg-hint: #8FA5C2;
+  --tg-link: #FCC97A;      /* lantern */
+  --tg-btn: #F5EFE0;
+  --tg-border: rgba(245,239,224,0.10);
+  --tg-card-shadow: 0 8px 22px -8px rgba(0,0,0,0.55), 0 2px 4px rgba(0,0,0,0.3);
+  --tg-accent: #FCC97A;
+  --tg-accent-soft: rgba(252,201,122,0.16);
+  --tg-warm: #FCC97A;
+  --tg-warm-soft: rgba(252,201,122,0.18);
+  --tg-rose: #F0908A;
+  --tg-leaf: #88C49A;
+  --tg-locked-bg: rgba(245,239,224,0.04);
+  --tg-locked-text: rgba(245,239,224,0.35);
+
+  --sky-1: #1F3556;
+  --sky-2: #16263F;
+  --sky-3: #0F1A2A;
 }
 
 html, body, #root { height: 100%; }
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  font-family: 'Quicksand', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   background: var(--tg-bg);
   color: var(--tg-text);
-  font-feature-settings: "cv11", "ss01";
 }
 
-.font-display { font-family: 'Space Grotesk', 'Inter', sans-serif; letter-spacing: -0.02em; }
-.font-mono { font-family: 'JetBrains Mono', monospace; }
+.font-display { font-family: 'Fraunces', Georgia, serif; letter-spacing: -0.01em; }
+.font-body { font-family: 'Quicksand', sans-serif; }
 
 .card {
   background: var(--tg-sec);
   border: 1px solid var(--tg-border);
-  border-radius: 16px;
+  border-radius: 22px;
   box-shadow: var(--tg-card-shadow);
 }
 .divider { border-color: var(--tg-border); }
 
-.dot-accent {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--tg-accent);
-  box-shadow: 0 0 0 4px var(--tg-accent-soft);
-  display: inline-block;
+/* Hero sky with painterly clouds — pure CSS, no images needed */
+.sky {
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 100%, rgba(252,201,122,0.18), transparent 60%),
+    radial-gradient(ellipse 70% 50% at 80% 0%, rgba(255,255,255,0.25), transparent 60%),
+    linear-gradient(180deg, var(--sky-1) 0%, var(--sky-2) 60%, var(--sky-3) 100%);
+  position: relative;
+  overflow: hidden;
 }
+.sky::before {
+  content: '';
+  position: absolute; left: -5%; top: 30%;
+  width: 38%; aspect-ratio: 1;
+  background: radial-gradient(circle, #ffffff 0%, #ffffff 55%, transparent 60%);
+  filter: blur(6px); opacity: 0.85;
+  border-radius: 50%;
+}
+.sky::after {
+  content: '';
+  position: absolute; right: 8%; top: 55%;
+  width: 30%; aspect-ratio: 1;
+  background: radial-gradient(circle, #ffffff 0%, #ffffff 55%, transparent 60%);
+  filter: blur(7px); opacity: 0.75;
+  border-radius: 50%;
+}
+.tg-dark .sky::before, .tg-dark .sky::after { opacity: 0.18; background: radial-gradient(circle, #C8DCEF 0%, #C8DCEF 50%, transparent 60%); }
 
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(8px); }
+  from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
-.fade-up { animation: fadeUp 0.4s cubic-bezier(0,0,0.2,1) both; }
+.fade-up { animation: fadeUp 0.5s cubic-bezier(0,0,0.2,1) both; }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+.float-slow { animation: float 5s ease-in-out infinite; }
 
 ::-webkit-scrollbar { width: 0; display: none; }
 * { -webkit-tap-highlight-color: transparent; }
