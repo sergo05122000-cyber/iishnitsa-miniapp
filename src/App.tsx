@@ -1,5 +1,7 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, lazy, Suspense } from 'react'
 import { folders, channelName, channelSubtitle, tgUrlFor, type Folder, type Post } from './data'
+
+const HeroScene = lazy(() => import('./HeroScene'))
 
 type Tab = 'folders' | 'search' | 'saved' | 'settings'
 type View =
@@ -43,33 +45,14 @@ function Header({ title, subtitle, onBack }: { title: string; subtitle?: string;
   )
 }
 
-// Topographic ridge SVG — золотые линии холмов как на референсе
-function TopoRidge() {
-  return (
-    <svg className="absolute left-0 right-0 bottom-0 w-full" height="120" viewBox="0 0 400 120" fill="none" preserveAspectRatio="none">
-      <defs>
-        <linearGradient id="ridge" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#FFD27A" stopOpacity="0.9" />
-          <stop offset="100%" stopColor="#E5B247" stopOpacity="0.15" />
-        </linearGradient>
-        <filter id="glow"><feGaussianBlur stdDeviation="2"/></filter>
-      </defs>
-      {/* back layers */}
-      <path d="M0,80 Q40,70 80,75 T160,65 T240,72 T320,60 T400,68 V120 H0 Z" fill="rgba(229,178,71,0.05)" />
-      <path d="M0,90 Q50,82 100,85 T200,75 T300,82 T400,75 V120 H0 Z" fill="rgba(229,178,71,0.07)" />
-      {/* main ridge with glow */}
-      <path d="M0,95 Q30,80 60,85 Q90,90 120,70 Q150,55 180,72 Q210,85 240,68 Q270,50 300,65 Q340,80 400,72" stroke="url(#ridge)" strokeWidth="1.2" fill="none" filter="url(#glow)" />
-      <path d="M0,95 Q30,80 60,85 Q90,90 120,70 Q150,55 180,72 Q210,85 240,68 Q270,50 300,65 Q340,80 400,72" stroke="#FFD27A" strokeWidth="0.6" fill="none" />
-      {/* peak dots */}
-      <circle cx="120" cy="70" r="2" fill="#FFD27A" filter="url(#glow)" />
-      <circle cx="300" cy="65" r="2" fill="#FFD27A" filter="url(#glow)" />
-    </svg>
-  )
-}
-
 function HomeHero({ totalPosts, openCount }: { totalPosts: number; openCount: number }) {
   return (
-    <div className="hero-bg relative px-5 pt-6 pb-4 overflow-hidden" style={{ minHeight: 280 }}>
+    <div className="hero-bg relative px-5 pt-6 pb-4 overflow-hidden" style={{ minHeight: 340 }}>
+      {/* 3D scene background */}
+      <Suspense fallback={null}>
+        <HeroScene />
+      </Suspense>
+
       {/* Top status strip */}
       <div className="flex items-center justify-between mb-8 text-[9px] font-mono uppercase tracking-[0.2em] text-tg-hint relative z-10">
         <span className="flex items-center gap-1.5">
@@ -97,8 +80,6 @@ function HomeHero({ totalPosts, openCount }: { totalPosts: number; openCount: nu
         <StatChip label="Открыто" value={openCount} accent />
         <StatChip label="Постов" value={totalPosts} />
       </div>
-
-      <TopoRidge />
     </div>
   )
 }
