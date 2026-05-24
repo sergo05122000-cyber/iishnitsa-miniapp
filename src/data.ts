@@ -3,8 +3,12 @@ export type Post = {
   title: string
   excerpt: string
   date: string
-  type: 'text' | 'video' | 'pdf' | 'mixed' | 'voice'
+  type: 'text' | 'video' | 'pdf' | 'mixed' | 'voice' | 'file'
   pinned?: boolean
+  body?: string
+  fileUrl?: string
+  fileName?: string
+  fileSize?: string
 }
 export type Folder = {
   id: string
@@ -18,6 +22,7 @@ export type Folder = {
 }
 const today = new Date()
 const dayBack = (d: number) => new Date(today.getTime() - d*86400000).toLocaleDateString('ru-RU')
+const asset = (p: string) => `${import.meta.env.BASE_URL}${p}`
 
 export const channelName = 'ИИшница'
 export const channelSubtitle = '7 разделов · приватный клуб'
@@ -46,8 +51,37 @@ export const folders: Folder[] = [
     count: 0, accent: 'from-violet-500 to-fuchsia-500', closed: true, posts: [],
   },
   {
-    id: 'kb', icon: '📚', title: 'База знаний', subtitle: 'Промпты, шаблоны, чек-листы',
-    count: 0, accent: 'from-amber-500 to-yellow-500', closed: true, posts: [],
+    id: 'kb', icon: '📚', title: 'База знаний', subtitle: 'Промпты, шаблоны, скиллы, чек-листы',
+    count: 0, accent: 'from-amber-500 to-yellow-500',
+    posts: [
+      {
+        id: 'kb-web-design-pro',
+        title: 'Скилл web-design-pro для Claude Code',
+        excerpt: 'Готовый skill для генерации профессиональных сайтов: 8 дизайн-направлений, AIDA-структура, компоненты и анимации.',
+        date: dayBack(0),
+        type: 'file',
+        pinned: true,
+        fileUrl: asset('files/web-design-pro.skill'),
+        fileName: 'web-design-pro.skill',
+        fileSize: '17 KB',
+        body: `Скилл для Claude Code, который превращает агента в фронтенд-дизайнера уровня senior.
+
+Что внутри:
+- SKILL.md — алгоритм выбора стиля, структуры, копирайта под лендинги, портфолио, SaaS, бизнес-сайты.
+- references/website-creation.md (46 KB) — готовые компоненты: hero, navbar, features, pricing, FAQ, footer + анимации, эффекты, шрифтовые пары, паттерны адаптивности.
+
+Как поставить:
+1. Скачай файл по кнопке ниже.
+2. Распакуй (это zip, переименованный в .skill).
+3. Скопируй папку web-design-pro в ~/.claude/skills/ (для всех проектов) или в .claude/skills/ конкретного проекта.
+4. В чате с Claude Code напиши "сделай лендинг про X" — скилл подхватится автоматически.
+
+Когда триггерится:
+"сделай сайт", "напиши лендинг", "сверстай страницу", "frontend", "веб-приложение", "адаптивный сайт", "одностраничник" — и любые синонимы.
+
+Этот мини-апп переделан с применением этого скилла. Направление — Editorial × Tech (Space Grotesk + Inter).`,
+      },
+    ],
   },
   {
     id: 'intro', icon: '👮', title: 'Знакомства', subtitle: 'Расскажи коротко: кто ты, откуда пришёл и зачем',

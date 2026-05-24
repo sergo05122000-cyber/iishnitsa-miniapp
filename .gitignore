@@ -5,3 +5,4 @@ dist
 logs/
 shot-*.mjs
 shoot.mjs
+bot.pid

@@ -8,7 +8,7 @@ type View =
   | { kind: 'post'; folderId: string; postId: string }
 
 const TYPE_LABEL: Record<Post['type'], string> = {
-  text: 'TEXT', video: 'VIDEO', pdf: 'PDF', mixed: 'MIXED', voice: 'VOICE',
+  text: 'TEXT', video: 'VIDEO', pdf: 'PDF', mixed: 'MIXED', voice: 'VOICE', file: 'FILE',
 }
 
 function Header({ title, subtitle, onBack, display }: { title: string; subtitle?: string; onBack?: () => void; display?: boolean }) {
@@ -162,26 +162,50 @@ function FolderView({ folderId, onBack, onOpen }: { folderId: string; onBack: ()
 function PostView({ folderId, postId, onBack }: { folderId: string; postId: string; onBack: () => void }) {
   const f = folders.find(x => x.id === folderId)!
   const p = f.posts.find(x => x.id === postId)!
+  const bodyParagraphs = (p.body ?? '').trim().split(/\n\n+/).filter(Boolean)
+
   return (
     <>
       <Header title={f.title} subtitle={p.date} onBack={onBack} />
-      <div className="px-5 py-6 fade-up">
+      <div className="px-5 py-6 pb-24 fade-up">
         <div className="flex items-center gap-2 mb-3">
           <span className="font-mono text-[10px] uppercase tracking-wider text-tg-accent">{TYPE_LABEL[p.type]}</span>
           {p.pinned && <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-tg-accent-soft text-tg-accent font-semibold">PIN</span>}
         </div>
         <h1 className="font-display text-[26px] font-bold leading-tight mb-4">{p.title}</h1>
+
         <div className="text-tg-text/85 text-[15px] leading-relaxed space-y-3">
-          <p>{p.excerpt}</p>
-          <p>Здесь будет полный текст поста из ИИшницы — картинки, видео, голосовые, файлы, ссылки на источники.</p>
+          <p className="text-tg-hint">{p.excerpt}</p>
+          {bodyParagraphs.length > 0
+            ? bodyParagraphs.map((para, i) => <p key={i} className="whitespace-pre-line">{para}</p>)
+            : <p>Здесь будет полный текст поста из ИИшницы — картинки, видео, голосовые, файлы, ссылки на источники.</p>}
         </div>
 
-        <div className="card p-4 my-6">
-          <div className="font-mono text-[10px] uppercase tracking-wider text-tg-hint mb-2">Превью</div>
-          <div className="text-[14px] text-tg-text/80 leading-snug">Когда зальём реальный контент канала — здесь будет оригинальный пост с форматированием.</div>
-        </div>
+        {p.fileUrl && (
+          <div className="card p-4 my-6 flex items-center gap-3">
+            <div className="w-12 h-12 rounded-xl bg-tg-accent-soft flex items-center justify-center shrink-0">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-tg-accent"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="font-display font-semibold text-[14px] truncate">{p.fileName}</div>
+              <div className="font-mono text-[11px] text-tg-hint mt-0.5">{p.fileSize} · skill для Claude Code</div>
+            </div>
+            <a href={p.fileUrl} download={p.fileName}
+              className="shrink-0 px-3.5 py-2 rounded-xl bg-tg-btn text-tg-bg font-display font-semibold text-[12px] active:scale-95 transition flex items-center gap-1.5">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Скачать
+            </a>
+          </div>
+        )}
 
-        <button className="w-full py-3.5 rounded-2xl bg-tg-btn text-tg-bg font-display font-semibold text-[15px] active:scale-[0.98] transition flex items-center justify-center gap-2">
+        {!p.fileUrl && !p.body && (
+          <div className="card p-4 my-6">
+            <div className="font-mono text-[10px] uppercase tracking-wider text-tg-hint mb-2">Превью</div>
+            <div className="text-[14px] text-tg-text/80 leading-snug">Когда зальём реальный контент канала — здесь будет оригинальный пост с форматированием.</div>
+          </div>
+        )}
+
+        <button className="w-full py-3.5 rounded-2xl bg-tg-btn text-tg-bg font-display font-semibold text-[15px] active:scale-[0.98] transition flex items-center justify-center gap-2 mt-4">
           Открыть в Telegram
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
         </button>
