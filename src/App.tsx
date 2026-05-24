@@ -11,6 +11,21 @@ const TYPE_LABEL: Record<Post['type'], string> = {
   text: 'TEXT', video: 'VIDEO', pdf: 'PDF', mixed: 'MIXED', voice: 'VOICE', file: 'FILE',
 }
 
+// Monoline иконки в стиле Lucide — премиальный паттерн (Linear, Vercel, Notion).
+function FolderIcon({ name, className = 'w-6 h-6', stroke = 2 }: { name: string; className?: string; stroke?: number }) {
+  const common = { width: 24, height: 24, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: stroke, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const, className }
+  switch (name) {
+    case 'message': return <svg {...common}><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+    case 'trophy': return <svg {...common}><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+    case 'zap': return <svg {...common}><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+    case 'cpu': return <svg {...common}><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>
+    case 'book': return <svg {...common}><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+    case 'users': return <svg {...common}><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    case 'help': return <svg {...common}><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    default: return null
+  }
+}
+
 function Header({ title, subtitle, onBack, display }: { title: string; subtitle?: string; onBack?: () => void; display?: boolean }) {
   return (
     <div className="sticky top-0 z-10 backdrop-blur-xl bg-tg-bg/80 border-b divider px-5 pt-4 pb-3 flex items-center gap-3">
@@ -45,9 +60,9 @@ function FolderCard({ f, index, onOpen }: { f: Folder; index: number; onOpen: ()
         flex flex-col gap-3 min-h-[150px]`}
     >
       <div className="flex items-start justify-between">
-        <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl
-          ${locked ? 'bg-tg-locked-bg border border-tg-border opacity-50' : `bg-gradient-to-br ${f.accent} shadow-sm`}`}>
-          {f.icon}
+        <div className={`w-11 h-11 rounded-xl flex items-center justify-center
+          ${locked ? 'bg-tg-locked-bg border border-tg-border text-tg-locked-text' : `bg-gradient-to-br ${f.accent} text-white shadow-sm`}`}>
+          <FolderIcon name={f.icon} className="w-[22px] h-[22px]" stroke={locked ? 1.8 : 2} />
         </div>
         <span className={`font-mono text-[11px] font-medium tabular-nums tracking-tight ${locked ? 'text-tg-locked-text' : 'text-tg-hint'}`}>
           {num}
