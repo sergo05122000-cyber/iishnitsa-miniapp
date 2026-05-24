@@ -53,38 +53,38 @@ function FolderCard({ f, index, onOpen }: { f: Folder; index: number; onOpen: ()
     <button
       onClick={onOpen}
       style={{ animationDelay: `${index * 40}ms` }}
-      className={`fade-up relative w-full text-left p-4 rounded-2xl border transition-all active:scale-[0.98]
+      className={`fade-up group relative w-full text-left p-4 rounded-2xl border transition-all active:scale-[0.98] overflow-hidden
         ${locked
-          ? 'bg-tg-locked-bg border-transparent'
-          : 'bg-tg-sec border-tg-border hover:border-tg-accent/30'}
-        flex flex-col gap-3 min-h-[150px]`}
+          ? 'bg-transparent border-tg-border/60'
+          : 'bg-tg-sec border-tg-border hover:border-tg-accent/40'}
+        flex flex-col min-h-[160px]`}
     >
-      <div className="flex items-start justify-between">
-        <div className={`w-11 h-11 rounded-xl flex items-center justify-center
-          ${locked ? 'bg-tg-locked-bg border border-tg-border text-tg-locked-text' : `bg-gradient-to-br ${f.accent} text-white shadow-sm`}`}>
-          <FolderIcon name={f.icon} className="w-[22px] h-[22px]" stroke={locked ? 1.8 : 2} />
-        </div>
-        <span className={`font-mono text-[11px] font-medium tabular-nums tracking-tight ${locked ? 'text-tg-locked-text' : 'text-tg-hint'}`}>
-          {num}
-        </span>
+      <span className="font-display font-bold tabular-nums leading-none text-[40px] absolute top-3 right-3.5 pointer-events-none"
+        style={{ color: 'var(--tg-text)', opacity: locked ? 0.12 : 0.08 }}>
+        {num}
+      </span>
+
+      <div className={`w-9 h-9 rounded-lg border flex items-center justify-center mb-auto
+        ${locked ? 'border-tg-border/60 text-tg-locked-text' : 'border-tg-border text-tg-accent'}`}>
+        <FolderIcon name={f.icon} className="w-[18px] h-[18px]" stroke={1.6} />
       </div>
 
-      <div className="flex-1 min-w-0">
+      <div className="mt-3 min-w-0 relative z-10">
         <div className={`font-display font-semibold text-[15px] leading-tight ${locked ? 'text-tg-locked-text' : 'text-tg-text'}`}>
           {f.title}
         </div>
-        <div className={`text-[11px] mt-1.5 leading-snug line-clamp-2 ${locked ? 'text-tg-locked-text' : 'text-tg-hint'}`}>
+        <div className={`text-[11px] mt-1.5 leading-snug line-clamp-2 ${locked ? 'text-tg-locked-text/80' : 'text-tg-hint'}`}>
           {f.subtitle}
         </div>
       </div>
 
-      <div className="flex items-center justify-between pt-1">
+      <div className={`flex items-center justify-between pt-3 mt-3 border-t ${locked ? 'border-tg-border/40' : 'border-tg-border'}`}>
         <span className={`font-mono text-[10px] uppercase tracking-wider ${locked ? 'text-tg-locked-text' : 'text-tg-hint'}`}>
-          {locked ? 'СКОРО' : `${f.posts.length} ${f.posts.length === 1 ? 'пост' : 'постов'}`}
+          {locked ? 'Скоро' : `${f.posts.length} ${f.posts.length === 1 ? 'пост' : 'постов'}`}
         </span>
         {locked
-          ? <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-tg-locked-text"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          : <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="text-tg-text/70"><polyline points="9 18 15 12 9 6"/></svg>
+          ? <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="text-tg-locked-text"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          : <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-tg-accent"><polyline points="9 18 15 12 9 6"/></svg>
         }
       </div>
     </button>
