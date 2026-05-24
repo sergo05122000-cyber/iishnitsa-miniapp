@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --tg-bg: #FFFFFF;
+  --tg-sec: #F6F6F8;
+  --tg-text: #0F1014;
+  --tg-hint: #8A8E96;
+  --tg-link: #007AFF;
+  --tg-btn: #007AFF;
+  --tg-border: rgba(0,0,0,0.06);
+  --tg-card-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+.tg-dark {
+  --tg-bg: #16171B;
+  --tg-sec: #1F2024;
+  --tg-text: #FFFFFF;
+  --tg-hint: #8B8E93;
+  --tg-link: #65B5F6;
+  --tg-btn: #65B5F6;
+  --tg-border: rgba(255,255,255,0.06);
+  --tg-card-shadow: 0 1px 3px rgba(0,0,0,0.4);
+}
+html, body, #root { height: 100%; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background: var(--tg-bg);
+  color: var(--tg-text);
+}
+.card {
+  background: var(--tg-sec);
+  border-radius: 14px;
+  box-shadow: var(--tg-card-shadow);
+}
+.divider { border-color: var(--tg-border); }
