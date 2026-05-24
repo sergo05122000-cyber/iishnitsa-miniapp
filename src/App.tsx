@@ -104,19 +104,23 @@ function FolderCard({ f, index, onOpen }: { f: Folder; index: number; onOpen: ()
   const locked = !!f.closed
   const num = String(index + 1).padStart(2, '0')
 
+  const liveClass = locked ? 'card-locked' : 'card-live'
+  const shimmerDelay = `${(index * 0.9) % 7}s`
+
   return (
     <button
       onClick={onOpen}
-      style={{ animationDelay: `${index * 50}ms` }}
-      className={`fade-up card relative w-full text-left p-4 transition-all active:scale-[0.98] flex flex-col gap-3 min-h-[170px] overflow-hidden ${locked ? 'opacity-50' : ''}`}
+      style={{ animationDelay: `${index * 50}ms`, ['--shimmer-delay' as any]: shimmerDelay }}
+      className={`fade-up card ${liveClass} relative w-full text-left p-4 transition-all active:scale-[0.96] active:rotate-[0.4deg] flex flex-col gap-3 min-h-[170px] overflow-hidden ${locked ? 'opacity-50' : ''}`}
     >
       {/* Top-right: номер моноспейс */}
-      <span className="absolute top-3 right-3.5 text-[10px] font-mono uppercase tracking-wider text-tg-hint">
+      <span className={`card-number absolute top-3 right-3.5 text-[10px] font-mono uppercase tracking-wider ${locked ? 'text-tg-hint' : ''}`}
+        style={!locked ? { color: 'var(--tg-accent)' } : undefined}>
         {num} {locked && '· LOCKED'}
       </span>
 
       {/* Icon block */}
-      <div className="w-11 h-11 rounded-lg border flex items-center justify-center"
+      <div className="card-icon w-11 h-11 rounded-lg border flex items-center justify-center"
         style={{
           borderColor: locked ? 'var(--tg-border)' : 'rgba(229,178,71,0.32)',
           background: locked ? 'transparent' : 'rgba(229,178,71,0.06)',

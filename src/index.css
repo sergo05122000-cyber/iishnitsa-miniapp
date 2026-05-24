@@ -103,5 +103,66 @@ body::after {
   100% { transform: translateX(100%); }
 }
 
+/* === Живые карточки разделов === */
+
+/* Shimmer-блик по диагонали — пробегает раз в ~7 сек */
+@keyframes cardShimmer {
+  0% { transform: translate(-120%, -120%) rotate(35deg); opacity: 0; }
+  10% { opacity: 0.55; }
+  50% { opacity: 0.55; }
+  60% { transform: translate(120%, 120%) rotate(35deg); opacity: 0; }
+  100% { transform: translate(120%, 120%) rotate(35deg); opacity: 0; }
+}
+
+/* Border-glow — золотая граница "дышит" */
+@keyframes borderGlow {
+  0%, 100% { box-shadow: var(--tg-card-shadow), 0 0 0 rgba(229,178,71,0); }
+  50% { box-shadow: var(--tg-card-shadow), 0 0 22px -4px rgba(229,178,71,0.22); }
+}
+
+/* Icon-float — плавный вертикальный дрейф */
+@keyframes iconFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+
+/* Locked breath — медленное приглушённое дыхание */
+@keyframes lockedBreath {
+  0%, 100% { opacity: 0.42; }
+  50% { opacity: 0.58; }
+}
+
+/* Number glow — мерцание цифры 01-07 */
+@keyframes numberGlow {
+  0%, 100% { opacity: 0.55; text-shadow: 0 0 0 rgba(229,178,71,0); }
+  50% { opacity: 1; text-shadow: 0 0 12px rgba(229,178,71,0.45); }
+}
+
+.card-live {
+  animation: borderGlow 5.5s ease-in-out infinite;
+}
+.card-live::after {
+  content: '';
+  position: absolute;
+  inset: -50%;
+  width: 60%;
+  height: 220%;
+  background: linear-gradient(90deg, transparent 0%, rgba(229,178,71,0.18) 50%, transparent 100%);
+  filter: blur(8px);
+  pointer-events: none;
+  animation: cardShimmer 7s ease-in-out infinite;
+  animation-delay: var(--shimmer-delay, 0s);
+}
+.card-live .card-icon { animation: iconFloat 4s ease-in-out infinite; }
+.card-live .card-number { animation: numberGlow 5s ease-in-out infinite; }
+
+.card-locked {
+  animation: lockedBreath 6s ease-in-out infinite !important;
+}
+
 ::-webkit-scrollbar { width: 0; display: none; }
 * { -webkit-tap-highlight-color: transparent; }
+
+@media (prefers-reduced-motion: reduce) {
+  .card-live, .card-live::after, .card-live .card-icon, .card-live .card-number, .card-locked, .pulse-dot { animation: none !important; }
+}
