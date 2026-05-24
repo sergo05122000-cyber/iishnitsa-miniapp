@@ -9,6 +9,7 @@ export type Post = {
   fileUrl?: string
   fileName?: string
   fileSize?: string
+  tgUrl?: string  // прямая ссылка на сообщение в TG (https://t.me/<channel>/<msg_id>)
 }
 export type Folder = {
   id: string
@@ -18,7 +19,15 @@ export type Folder = {
   count: number
   accent: string
   closed?: boolean
+  tgChannel?: string  // username канала без @
   posts: Post[]
+}
+
+// Главный TG-канал клуба. Кнопка "Открыть в Telegram" ведёт сюда, если у поста нет своего tgUrl.
+export const TG_CHANNEL = 'road_iishnika'
+export const tgUrlFor = (channel?: string, msgId?: string | number) => {
+  const ch = channel || TG_CHANNEL
+  return msgId ? `https://t.me/${ch}/${msgId}` : `https://t.me/${ch}`
 }
 const today = new Date()
 const dayBack = (d: number) => new Date(today.getTime() - d*86400000).toLocaleDateString('ru-RU')

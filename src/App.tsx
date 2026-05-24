@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { folders, channelName, channelSubtitle, type Folder, type Post } from './data'
+import { folders, channelName, channelSubtitle, tgUrlFor, type Folder, type Post } from './data'
 
 type Tab = 'folders' | 'search' | 'saved' | 'settings'
 type View =
@@ -159,10 +159,20 @@ function FolderView({ folderId, onBack, onOpen }: { folderId: string; onBack: ()
   )
 }
 
+function openTgLink(url: string) {
+  const tg = (window as any).Telegram?.WebApp
+  if (tg && typeof tg.openTelegramLink === 'function') {
+    tg.openTelegramLink(url)
+  } else {
+    window.open(url, '_blank')
+  }
+}
+
 function PostView({ folderId, postId, onBack }: { folderId: string; postId: string; onBack: () => void }) {
   const f = folders.find(x => x.id === folderId)!
   const p = f.posts.find(x => x.id === postId)!
   const bodyParagraphs = (p.body ?? '').trim().split(/\n\n+/).filter(Boolean)
+  const tgLink = p.tgUrl || tgUrlFor(f.tgChannel)
 
   return (
     <>
@@ -205,7 +215,9 @@ function PostView({ folderId, postId, onBack }: { folderId: string; postId: stri
           </div>
         )}
 
-        <button className="w-full py-3.5 rounded-2xl bg-tg-btn text-tg-bg font-display font-semibold text-[15px] active:scale-[0.98] transition flex items-center justify-center gap-2 mt-4">
+        <button
+          onClick={() => openTgLink(tgLink)}
+          className="w-full py-3.5 rounded-2xl bg-tg-btn text-tg-bg font-display font-semibold text-[15px] active:scale-[0.98] transition flex items-center justify-center gap-2 mt-4">
           Открыть в Telegram
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
         </button>
