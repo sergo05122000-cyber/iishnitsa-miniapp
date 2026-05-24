@@ -6,7 +6,7 @@ export default defineConfig(({ mode }) => ({
   plugins: [react()],
   base: mode === 'production' ? '/iishnitsa-miniapp/' : '/',
   build: {
-    target: ['es2017', 'safari11'],
+    target: 'es2020',  // iOS Safari 14+ baseline
   },
   server: {
     host: '0.0.0.0',

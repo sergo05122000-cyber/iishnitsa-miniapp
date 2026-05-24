@@ -33,7 +33,9 @@
           setTimeout(function () {
             var root = document.getElementById('root');
             if (root && root.innerHTML.trim() === '') {
-              show('ROOT EMPTY after 4s.\nUA: ' + navigator.userAgent + '\nTG: ' + (window.Telegram && window.Telegram.WebApp ? JSON.stringify({v:window.Telegram.WebApp.version, p:window.Telegram.WebApp.platform}) : 'no'));
+              var stage = window.__stage || 'NEVER STARTED — module not loaded';
+              var tg = window.Telegram && window.Telegram.WebApp ? JSON.stringify({v:window.Telegram.WebApp.version, p:window.Telegram.WebApp.platform}) : 'no';
+              show('ROOT EMPTY after 4s.\nSTAGE: ' + stage + '\nUA: ' + navigator.userAgent + '\nTG: ' + tg);
             }
           }, 4000);
         });
