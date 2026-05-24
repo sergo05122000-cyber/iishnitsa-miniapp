@@ -75,43 +75,91 @@ function PanScene({ className = '' }: { className?: string }) {
 
       {/* === PAN + HAND group (мягкое покачивание) === */}
       <g className="pan-group">
-        {/* HAND — кисть и часть предплечья снизу-справа */}
-        <g className="hand-group">
-          {/* Предплечье уходит за край вправо */}
-          <path
-            d="M310 200 L 360 218 L 360 240 L 295 218 Z"
-            fill="url(#ps-skin)"
-            stroke="rgba(229,178,71,0.55)"
-            strokeWidth="1.4"
-          />
-          {/* Кисть — обхват ручки */}
-          <ellipse cx="295" cy="200" rx="22" ry="14" fill="url(#ps-skin)" stroke="rgba(229,178,71,0.7)" strokeWidth="1.5" />
-          {/* Пальцы — линии-сгибы */}
-          <path d="M278 196 Q 282 192, 290 192" stroke="rgba(229,178,71,0.5)" strokeWidth="1" fill="none" />
-          <path d="M278 200 Q 282 198, 290 198" stroke="rgba(229,178,71,0.5)" strokeWidth="1" fill="none" />
-          <path d="M278 204 Q 282 206, 290 206" stroke="rgba(229,178,71,0.5)" strokeWidth="1" fill="none" />
-          {/* Большой палец сверху ручки */}
-          <path d="M300 188 Q 310 184, 320 188" stroke="rgba(229,178,71,0.7)" strokeWidth="1.4" fill="none" />
-        </g>
-
-        {/* HANDLE — ручка сковороды */}
-        <rect x="222" y="192" width="80" height="14" rx="6" fill="url(#ps-pan)" stroke="rgba(229,178,71,0.85)" strokeWidth="1.6" />
-        {/* Заклёпки */}
-        <circle cx="230" cy="199" r="1.8" fill="#E5B247" opacity="0.7" />
-        <circle cx="244" cy="199" r="1.8" fill="#E5B247" opacity="0.7" />
-
-        {/* PAN — корпус (эллипс сверху, корпус снизу) */}
-        {/* боковая стенка */}
+        {/* PAN корпус */}
         <path
           d="M40 130 Q 40 180, 80 192 L 200 192 Q 240 180, 240 130 Z"
           fill="url(#ps-pan)"
           stroke="rgba(229,178,71,0.9)"
           strokeWidth="1.8"
         />
+
+        {/* HANDLE BASE — крепёжная пластинка соединяет ручку и сковороду */}
+        <path
+          d="M225 170 L 252 168 L 252 196 L 225 194 Z"
+          fill="url(#ps-pan)"
+          stroke="rgba(229,178,71,0.95)"
+          strokeWidth="1.6"
+        />
+        <circle cx="232" cy="176" r="2" fill="#E5B247" />
+        <circle cx="232" cy="188" r="2" fill="#E5B247" />
+        <circle cx="244" cy="176" r="2" fill="#E5B247" />
+        <circle cx="244" cy="188" r="2" fill="#E5B247" />
+
+        {/* HANDLE — ручка сковороды, конусится к концу */}
+        <path
+          d="M250 174 L 308 184 Q 316 187, 316 192 Q 316 197, 308 200 L 250 196 Z"
+          fill="url(#ps-pan)"
+          stroke="rgba(229,178,71,0.9)"
+          strokeWidth="1.6"
+        />
+        {/* блик на ручке */}
+        <path d="M254 178 L 304 188" stroke="rgba(229,178,71,0.4)" strokeWidth="0.8" fill="none" />
+
         {/* верхний край (ободок) */}
         <ellipse cx="140" cy="130" rx="100" ry="22" fill="#0a0805" stroke="rgba(229,178,71,1)" strokeWidth="2.2" className="pan-glow" />
         {/* внутренний ободок */}
         <ellipse cx="140" cy="130" rx="92" ry="18" fill="#1a1208" stroke="rgba(229,178,71,0.4)" strokeWidth="0.8" />
+
+        {/* === HAND — кисть с пальцами поверх ручки === */}
+        <g className="hand-group">
+          {/* Предплечье уходит за правый край */}
+          <path
+            d="M322 165 L 360 158 L 360 215 L 322 212 Z"
+            fill="url(#ps-skin)"
+            stroke="rgba(229,178,71,0.6)"
+            strokeWidth="1.4"
+          />
+          {/* Ладонь обхватывает ручку */}
+          <path
+            d="M276 170
+               Q 266 178, 268 192
+               Q 270 206, 286 212
+               Q 305 216, 324 212
+               L 324 165
+               Q 300 162, 276 170 Z"
+            fill="url(#ps-skin)"
+            stroke="rgba(229,178,71,0.78)"
+            strokeWidth="1.5"
+          />
+          {/* Большой палец — сверху ручки, обхватывает её */}
+          <path
+            d="M286 174
+               Q 282 168, 290 162
+               Q 302 156, 312 162
+               Q 318 168, 312 176
+               L 296 180 Z"
+            fill="url(#ps-skin)"
+            stroke="rgba(229,178,71,0.85)"
+            strokeWidth="1.4"
+          />
+          {/* 4 пальца снизу-спереди обхватывают ручку */}
+          <g stroke="rgba(229,178,71,0.7)" strokeWidth="1.2" fill="url(#ps-skin)">
+            <ellipse cx="280" cy="200" rx="4.2" ry="7" />
+            <ellipse cx="290" cy="206" rx="4.2" ry="7" />
+            <ellipse cx="300" cy="208" rx="4.2" ry="7" />
+            <ellipse cx="310" cy="208" rx="4.2" ry="6" />
+          </g>
+          {/* Линии-разделители пальцев (видны на верхней стороне ладони) */}
+          <path d="M284 192 Q 285 184, 286 176" stroke="rgba(229,178,71,0.3)" strokeWidth="0.8" fill="none" />
+          <path d="M294 196 Q 295 188, 296 178" stroke="rgba(229,178,71,0.3)" strokeWidth="0.8" fill="none" />
+          <path d="M304 198 Q 305 190, 306 178" stroke="rgba(229,178,71,0.3)" strokeWidth="0.8" fill="none" />
+          {/* Костяшки-блики */}
+          <ellipse cx="280" cy="194" rx="2" ry="1.2" fill="rgba(255,225,180,0.45)" />
+          <ellipse cx="290" cy="200" rx="2" ry="1.2" fill="rgba(255,225,180,0.45)" />
+          <ellipse cx="300" cy="202" rx="2" ry="1.2" fill="rgba(255,225,180,0.45)" />
+          {/* Граница запястья */}
+          <path d="M322 165 Q 320 188, 322 212" stroke="rgba(229,178,71,0.45)" strokeWidth="1" fill="none" />
+        </g>
 
         {/* === ЯИЧНИЦА В СКОВОРОДЕ === */}
         {/* мягкое внешнее сияние */}
