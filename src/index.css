@@ -3,35 +3,66 @@
 @tailwind utilities;
 
 :root {
-  --tg-bg: #FFFFFF;
-  --tg-sec: #F6F6F8;
-  --tg-text: #0F1014;
-  --tg-hint: #8A8E96;
-  --tg-link: #007AFF;
-  --tg-btn: #007AFF;
-  --tg-border: rgba(0,0,0,0.06);
-  --tg-card-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  --tg-bg: #FBFAF7;
+  --tg-sec: #FFFFFF;
+  --tg-text: #0A0A0F;
+  --tg-hint: #6B6F76;
+  --tg-link: #2D5BFF;
+  --tg-btn: #0A0A0F;
+  --tg-border: rgba(10,10,15,0.08);
+  --tg-card-shadow: 0 1px 2px rgba(10,10,15,0.04);
+  --tg-accent: #2D5BFF;
+  --tg-accent-soft: rgba(45,91,255,0.08);
+  --tg-locked-bg: rgba(10,10,15,0.025);
+  --tg-locked-text: rgba(10,10,15,0.4);
 }
 .tg-dark {
-  --tg-bg: #16171B;
-  --tg-sec: #1F2024;
+  --tg-bg: #0A0A0F;
+  --tg-sec: #15151C;
   --tg-text: #FFFFFF;
-  --tg-hint: #8B8E93;
-  --tg-link: #65B5F6;
-  --tg-btn: #65B5F6;
-  --tg-border: rgba(255,255,255,0.06);
-  --tg-card-shadow: 0 1px 3px rgba(0,0,0,0.4);
+  --tg-hint: #8B8E96;
+  --tg-link: #6B8DFF;
+  --tg-btn: #FFFFFF;
+  --tg-border: rgba(255,255,255,0.07);
+  --tg-card-shadow: 0 1px 3px rgba(0,0,0,0.5);
+  --tg-accent: #6B8DFF;
+  --tg-accent-soft: rgba(107,141,255,0.12);
+  --tg-locked-bg: rgba(255,255,255,0.025);
+  --tg-locked-text: rgba(255,255,255,0.32);
 }
+
 html, body, #root { height: 100%; }
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', system-ui, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   background: var(--tg-bg);
   color: var(--tg-text);
+  font-feature-settings: "cv11", "ss01";
 }
+
+.font-display { font-family: 'Space Grotesk', 'Inter', sans-serif; letter-spacing: -0.02em; }
+.font-mono { font-family: 'JetBrains Mono', monospace; }
+
 .card {
   background: var(--tg-sec);
-  border-radius: 14px;
+  border: 1px solid var(--tg-border);
+  border-radius: 16px;
   box-shadow: var(--tg-card-shadow);
 }
 .divider { border-color: var(--tg-border); }
+
+.dot-accent {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--tg-accent);
+  box-shadow: 0 0 0 4px var(--tg-accent-soft);
+  display: inline-block;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fadeUp 0.4s cubic-bezier(0,0,0.2,1) both; }
+
+::-webkit-scrollbar { width: 0; display: none; }
+* { -webkit-tap-highlight-color: transparent; }

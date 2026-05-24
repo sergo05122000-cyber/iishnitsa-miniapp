@@ -3,13 +3,22 @@ export default {
   theme: { extend: {
     colors: {
       tg: {
-        bg: 'var(--tg-bg, #FFFFFF)',
-        sec: 'var(--tg-sec, #F0F0F4)',
-        text: 'var(--tg-text, #0F1014)',
-        hint: 'var(--tg-hint, #707579)',
-        link: 'var(--tg-link, #007AFF)',
-        btn: 'var(--tg-btn, #007AFF)',
+        bg: 'var(--tg-bg)',
+        sec: 'var(--tg-sec)',
+        text: 'var(--tg-text)',
+        hint: 'var(--tg-hint)',
+        link: 'var(--tg-link)',
+        btn: 'var(--tg-btn)',
+        accent: 'var(--tg-accent)',
+        'accent-soft': 'var(--tg-accent-soft)',
+        'locked-bg': 'var(--tg-locked-bg)',
+        'locked-text': 'var(--tg-locked-text)',
       },
+    },
+    fontFamily: {
+      display: ['Space Grotesk', 'Inter', 'sans-serif'],
+      body: ['Inter', 'system-ui', 'sans-serif'],
+      mono: ['JetBrains Mono', 'monospace'],
     },
   }},
 }

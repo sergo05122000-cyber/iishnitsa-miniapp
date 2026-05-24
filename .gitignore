@@ -1,6 +1,7 @@
 node_modules
 dist
-logs
-.env
 .DS_Store
-bun.lock
+*.log
+logs/
+shot-*.mjs
+shoot.mjs
