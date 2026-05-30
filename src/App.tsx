@@ -1,5 +1,19 @@
 import { useEffect, useMemo, useState } from 'react'
-import { folders, channelName, channelSubtitle, tgUrlFor, type Folder, type Post } from './data'
+import { folders, channelName, channelSubtitle, tgUrlFor, TG_QUESTIONS_TOPIC, type Folder, type Post } from './data'
+import { IntroForm } from './IntroForm'
+
+/** Open a Telegram link safely from within Telegram WebApp (or just window.open as fallback). */
+function openTelegram(url: string) {
+  const tg = (window as any).Telegram?.WebApp
+  try {
+    if (tg?.openTelegramLink && /^https:\/\/t\.me\//.test(url)) {
+      tg.openTelegramLink(url)
+      return
+    }
+    if (tg?.openLink) { tg.openLink(url); return }
+  } catch {}
+  window.open(url, '_blank', 'noopener')
+}
 
 type Tab = 'folders' | 'search' | 'saved' | 'settings'
 type View =
@@ -219,7 +233,7 @@ function HomeHero({ totalPosts, openCount }: { totalPosts: number; openCount: nu
 
       {/* Hero title */}
       <div className="relative z-10 mt-[200px]">
-        <div className="text-tg-hint text-[10px] uppercase tracking-[0.32em] font-mono mb-3 fade-up">приватный клуб</div>
+        <div className="text-tg-hint text-[10px] uppercase tracking-[0.32em] font-mono mb-3 fade-up">клуб</div>
         <h1 className="font-display text-[52px] leading-[0.92] fade-up text-glow-strong title-outline"
           style={{ animationDelay: '60ms', color: 'var(--tg-accent)', letterSpacing: '-0.035em', fontWeight: 800 }}>
           {channelName}
@@ -280,10 +294,10 @@ function FolderCard({ f, index, onOpen }: { f: Folder; index: number; onOpen: ()
       {/* Icon block */}
       <div className="card-icon w-11 h-11 rounded-lg border flex items-center justify-center"
         style={{
-          borderColor: locked ? 'var(--tg-border)' : 'rgba(229,178,71,0.32)',
-          background: locked ? 'transparent' : 'rgba(229,178,71,0.06)',
-          color: locked ? 'var(--tg-locked-text)' : 'var(--tg-accent)',
-          boxShadow: locked ? undefined : '0 0 18px rgba(229,178,71,0.08), inset 0 0 12px rgba(229,178,71,0.04)',
+          borderColor: locked ? 'var(--tg-border)' : 'rgba(6,182,212,0.34)',
+          background: locked ? 'transparent' : 'rgba(6,182,212,0.07)',
+          color: locked ? 'var(--tg-locked-text)' : 'var(--tg-icon)',
+          boxShadow: locked ? undefined : '0 0 18px rgba(6,182,212,0.10), inset 0 0 12px rgba(6,182,212,0.05)',
         }}>
         <FolderIcon name={f.icon} className="w-[20px] h-[20px]" stroke={1.5} />
       </div>
@@ -400,10 +414,10 @@ function WelcomeGuide({ onOpen }: { onOpen: (id: string) => void }) {
               {/* Иконка */}
               <div className="shrink-0 w-9 h-9 rounded-lg border flex items-center justify-center"
                 style={{
-                  borderColor: 'rgba(229,178,71,0.32)',
-                  background: 'rgba(229,178,71,0.06)',
-                  color: 'var(--tg-accent)',
-                  boxShadow: '0 0 14px rgba(229,178,71,0.08), inset 0 0 10px rgba(229,178,71,0.04)',
+                  borderColor: 'rgba(6,182,212,0.34)',
+                  background: 'rgba(6,182,212,0.07)',
+                  color: 'var(--tg-icon)',
+                  boxShadow: '0 0 14px rgba(6,182,212,0.10), inset 0 0 10px rgba(6,182,212,0.05)',
                 }}>
                 {s.icon}
               </div>
@@ -423,7 +437,7 @@ function WelcomeGuide({ onOpen }: { onOpen: (id: string) => void }) {
         {/* Footer hint */}
         <div className="mt-4 pt-3 border-t flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.16em] text-tg-hint" style={{ borderColor: 'var(--tg-border)' }}>
           <span className="w-1.5 h-1.5 rounded-full pulse-dot shrink-0" style={{ background: 'var(--tg-accent)' }} />
-          <span>прошёл всё — пишет жирный кейс в «Кейсы и результаты»</span>
+          <span>прошёл все три шага — ты в клубе</span>
         </div>
       </div>
     </div>
@@ -602,7 +616,7 @@ function SettingsView() {
           <div className="font-mono text-[10px] uppercase tracking-[0.18em] mb-2" style={{ color: 'var(--tg-accent)' }}>ABOUT</div>
           <div className="font-display font-bold text-[15px] uppercase tracking-wide">ИИшница</div>
           <div className="text-tg-hint text-[11px] mt-1 leading-relaxed">
-            Приватный клуб про путь из стройки в ИИ. Кейсы, автоматизации, AI-агенты, контент-скиллы для Claude Code.
+            Клуб про путь из стройки в ИИ. Кейсы, автоматизации, AI-агенты, контент-скиллы для Claude Code.
           </div>
           <div className="flex items-center gap-3 mt-3 pt-3 border-t divider font-mono">
             <span className="text-[10px] uppercase tracking-wider text-tg-hint">build</span>
@@ -643,6 +657,20 @@ function TabBar({ tab, setTab }: { tab: Tab; setTab: (t: Tab) => void }) {
 export function App() {
   const [tab, setTab] = useState<Tab>('folders')
   const [view, setView] = useState<View>({ kind: 'home' })
+  const [introOpen, setIntroOpen] = useState(false)
+
+  // Centralised navigation handler — intercepts 'intro' folder and 'i1' post
+  // and pops the intro form modal instead of standard navigation.
+  function handleOpenFolder(id: string) {
+    if (id === 'intro') { setIntroOpen(true); return }
+    if (id === 'qna') { openTelegram(TG_QUESTIONS_TOPIC); return }
+    setView({ kind: 'folder', folderId: id })
+  }
+  function handleOpenPost(folderId: string, postId: string) {
+    if (postId === 'i1') { setIntroOpen(true); return }
+    if (folderId === 'qna') { openTelegram(TG_QUESTIONS_TOPIC); return }
+    setView({ kind: 'post', folderId, postId })
+  }
 
   useEffect(() => {
     const tg = (window as any).Telegram?.WebApp
@@ -654,6 +682,15 @@ export function App() {
       }
     }
     document.documentElement.classList.add('tg-dark')
+
+    // Auto-open intro form when launched via ?form=intro (used by /anketa keyboard button)
+    try {
+      const params = new URLSearchParams(window.location.search)
+      const startParam = tg?.initDataUnsafe?.start_param
+      if (params.get('form') === 'intro' || startParam === 'intro' || window.location.hash === '#intro') {
+        setIntroOpen(true)
+      }
+    } catch {}
   }, [])
 
   const body = useMemo(() => {
@@ -662,9 +699,9 @@ export function App() {
       if (tab === 'saved') return <SavedView />
       return <SettingsView />
     }
-    if (view.kind === 'home') return <HomeView onOpen={(id) => setView({ kind: 'folder', folderId: id })} />
+    if (view.kind === 'home') return <HomeView onOpen={handleOpenFolder} />
     if (view.kind === 'folder') return <FolderView folderId={view.folderId} onBack={() => setView({ kind: 'home' })}
-      onOpen={(postId) => setView({ kind: 'post', folderId: view.folderId, postId })} />
+      onOpen={(postId) => handleOpenPost(view.folderId, postId)} />
     return <PostView folderId={view.folderId} postId={view.postId} onBack={() => setView({ kind: 'folder', folderId: view.folderId })} />
   }, [tab, view])
 
@@ -672,6 +709,7 @@ export function App() {
     <div className="flex flex-col min-h-screen">
       <div className="flex-1">{body}</div>
       <TabBar tab={tab} setTab={(t) => { setTab(t); setView({ kind: 'home' }) }} />
+      <IntroForm open={introOpen} onClose={() => setIntroOpen(false)} />
     </div>
   )
 }

@@ -27,6 +27,10 @@ export type Folder = {
 export const TG_GROUP_INVITE = 'https://t.me/+rVKsd93z5AQ1MTg6'
 // Канал блога (на случай если когда-то понадобится прямая ссылка на канал)
 export const TG_CHANNEL = 'road_iishnika'
+// Прямая ссылка на тред "Вопросы и разборы" в форум-группе клуба.
+// Пока ведёт на invite-ссылку группы. Когда у Серёги будет прямой link на топик
+// (https://t.me/c/<chat_internal_id>/<thread_id>), подменить здесь.
+export const TG_QUESTIONS_TOPIC = TG_GROUP_INVITE
 export const tgUrlFor = (channel?: string, msgId?: string | number) => {
   // Если у поста явно указан channel и msgId — ссылаемся на сообщение в канале.
   if (channel && msgId) return `https://t.me/${channel}/${msgId}`
@@ -40,7 +44,7 @@ const BASE = '/'
 const asset = (p: string) => `${BASE}${p}`
 
 export const channelName = 'ИИшница'
-export const channelSubtitle = '7 разделов · приватный клуб'
+export const channelSubtitle = '7 разделов клуба'
 
 export const folders: Folder[] = [
   {
@@ -63,7 +67,65 @@ export const folders: Folder[] = [
   },
   {
     id: 'agents', icon: 'cpu', title: 'AI-агенты', subtitle: 'Сборка и продакшен AI-агентов',
-    count: 0, accent: 'from-violet-500 to-fuchsia-500', closed: true, posts: [],
+    count: 0, accent: 'from-violet-500 to-fuchsia-500',
+    posts: [
+      {
+        id: 'agents-jarvis-cc',
+        title: 'Поднять личного Jarvis с нуля (версия Claude Code)',
+        excerpt: 'Полный инсталлятор: VPS, Claude Code, память 4 уровня, Telegram-шлюз, скиллы. 1270 строк, ~2-3 часа от нуля до бота в TG.',
+        date: dayBack(0),
+        type: 'file',
+        pinned: true,
+        fileUrl: asset('files/jarvis-installer.zip'),
+        fileName: 'jarvis-installer.zip',
+        fileSize: '37 KB',
+        body: `Полный инсталлятор личного AI-агента типа Jarvis на свой VPS. Этот вариант собран от Серёги через Claude Code.
+
+Что внутри архива:
+- INSTALLER.md - пошаговая инструкция от покупки VPS до работающего бота в Telegram (1270 строк)
+- prompt-1-structure.md - промпт для развёртывания структуры агента и SOUL
+- prompt-2-cron-references.md - промпт для cron-ротаций памяти и референсных файлов
+- prompt-3-telegram-gateway.md - промпт для установки Telegram-шлюза (опционально)
+
+Что получится в финале:
+- Запущенный сервер с агентом, доступным через Telegram
+- Память 4 уровня (моментальный контекст + долгосрочный архив, автокомпрессия по cron)
+- Агент умеет писать код, работать с файлами, делать ресёрч, управлять сервером, помнить контекст между сессиями
+- Allowlist (никто кроме вас не пишет боту)
+
+Время: 2-3 часа активной работы (без оплаты VPS).
+Деньги: ~600-1500 рублей в месяц VPS + 20$/мес Claude Pro + опц. ~5$ Groq.
+
+Подходит тому, кто хочет повторить мой путь и иметь персонального агента под рукой 24/7.`,
+      },
+      {
+        id: 'agents-jarvis-codex',
+        title: 'Поднять личного Jarvis с нуля (версия Codex)',
+        excerpt: 'Второй заход на инсталлятор, прошлифованный Codex. README, INSTALL, KNOWN-ISSUES + draft-посты для open-source релиза.',
+        date: dayBack(0),
+        pinned: true,
+        type: 'file',
+        fileUrl: asset('files/personal-jarvis-installer.zip'),
+        fileName: 'personal-jarvis-installer.zip',
+        fileSize: '42 KB',
+        body: `Второй вариант инсталлятора от Серёги — под публичный open-source релиз, собран через Codex CLI как второе мнение.
+
+Что внутри архива:
+- README.md - короткая презентация проекта и оглавление путей "сам поставлю" vs "под ключ"
+- INSTALL.md - полная пошаговая инструкция (1228 строк)
+- KNOWN-ISSUES.md - известные грабли с обходными путями
+- LICENSE - MIT, можно форкать и адаптировать
+- .planning/ - драфты постов и спека проекта (на случай если будете делать свою публичную версию)
+
+Чем отличается от первой версии:
+- Прошёл редактуру через Codex для широкой аудитории
+- Структурирован под публикацию на GitHub
+- Есть отдельный KNOWN-ISSUES со списком частых ошибок и их решений
+- Подходит под форк и адаптацию под свой бренд
+
+Бери, если хочешь повторить путь или сделать свою публичную версию инсталлятора. Обе версии описывают одну и ту же архитектуру - выбирай ту, которая удобнее читается.`,
+      },
+    ],
   },
   {
     id: 'kb', icon: 'book', title: 'База знаний', subtitle: 'Промпты, шаблоны, скиллы, чек-листы',

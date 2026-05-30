@@ -17,6 +17,7 @@
   --tg-accent: #E5B247;
   --tg-accent-bright: #FFD27A;
   --tg-accent-soft: rgba(229,178,71,0.14);
+  --tg-icon: #06B6D4;        /* cyan — section icons only, to break up the gold */
   --tg-glow: 0 0 24px rgba(229,178,71,0.35);
   --tg-glow-soft: 0 0 40px rgba(229,178,71,0.18);
   --tg-locked-bg: rgba(255,255,255,0.02);
