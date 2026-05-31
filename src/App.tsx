@@ -313,12 +313,12 @@ function FolderCard({ f, index, onOpen }: { f: Folder; index: number; onOpen: ()
 
       <div className="flex items-center justify-between pt-2 border-t" style={{ borderColor: 'var(--tg-border)' }}>
         <span className="font-mono text-[10px] uppercase tracking-[0.14em]"
-          style={{ color: locked ? 'var(--tg-locked-text)' : 'var(--tg-accent)' }}>
+          style={{ color: locked ? 'var(--tg-locked-text)' : 'var(--tg-icon)' }}>
           {locked ? '— —' : `${String(f.posts.length).padStart(2, '0')} ПОСТ${f.posts.length === 1 ? '' : 'ОВ'}`}
         </span>
         {locked
           ? <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-tg-locked-text"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          : <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--tg-accent)' }}><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          : <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--tg-icon)' }}><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         }
       </div>
     </button>
@@ -427,7 +427,7 @@ function WelcomeGuide({ onOpen }: { onOpen: (id: string) => void }) {
                 <div className="text-tg-hint text-[11px] mt-1 leading-snug">{s.sub}</div>
               </div>
               {/* Стрелка */}
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 mt-1" style={{ color: 'var(--tg-accent)' }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 mt-1" style={{ color: 'var(--tg-icon)' }}>
                 <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
               </svg>
             </button>
@@ -643,8 +643,8 @@ function TabBar({ tab, setTab }: { tab: Tab; setTab: (t: Tab) => void }) {
         return (
           <button key={it.id} onClick={() => setTab(it.id)}
             className="relative flex flex-col items-center gap-1 py-1.5 transition-colors"
-            style={{ color: active ? 'var(--tg-accent)' : 'var(--tg-hint)' }}>
-            {active && <span className="absolute -top-2 w-1.5 h-1.5 rounded-full pulse-dot" style={{ background: 'var(--tg-accent)' }} />}
+            style={{ color: active ? 'var(--tg-icon)' : 'var(--tg-hint)' }}>
+            {active && <span className="absolute -top-2 w-1.5 h-1.5 rounded-full pulse-dot" style={{ background: 'var(--tg-icon)' }} />}
             {it.icon}
             <span className="text-[9px] font-mono font-bold tracking-[0.16em]">{it.label}</span>
           </button>

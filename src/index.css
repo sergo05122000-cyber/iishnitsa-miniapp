@@ -17,7 +17,11 @@
   --tg-accent: #E5B247;
   --tg-accent-bright: #FFD27A;
   --tg-accent-soft: rgba(229,178,71,0.14);
-  --tg-icon: #06B6D4;        /* cyan — section icons only, to break up the gold */
+  /* Secondary accent — interactive/action elements (icons, CTA, active tab).
+     Gold stays brand/identity; this colour signals "tappable" so cards stop
+     blending while scrolling. Swap this one line to compare Vladimir's options:
+     #06B6D4 cyan (current) · #8B5CF6 violet · #10B981 emerald */
+  --tg-icon: #06B6D4;
   --tg-glow: 0 0 24px rgba(229,178,71,0.35);
   --tg-glow-soft: 0 0 40px rgba(229,178,71,0.18);
   --tg-locked-bg: rgba(255,255,255,0.02);
