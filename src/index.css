@@ -4,26 +4,29 @@
 
 /* === Cinematic Dark Premium — единая тема === */
 :root, .tg-dark {
+  /* Scroll-driven accent — JS lerps these gold->cyan as you scroll. */
+  --accent-rgb: 229, 178, 71;
+  --accent-bright-rgb: 255, 210, 122;
   --tg-bg: #060709;          /* deepest void */
   --tg-sec: #0E1014;         /* card surface */
   --tg-sec-2: #14171D;       /* elevated surface */
   --tg-text: #E8DFC8;        /* warm cream */
   --tg-hint: #7D7A6F;        /* muted gold-grey */
-  --tg-link: #E5B247;        /* warm gold */
-  --tg-btn: #E5B247;
-  --tg-border: rgba(229,178,71,0.10);
-  --tg-border-strong: rgba(229,178,71,0.22);
-  --tg-card-shadow: 0 12px 40px -16px rgba(229,178,71,0.10), 0 1px 0 rgba(255,255,255,0.02) inset;
-  --tg-accent: #E5B247;
-  --tg-accent-bright: #FFD27A;
-  --tg-accent-soft: rgba(229,178,71,0.14);
+  --tg-link: rgb(var(--accent-rgb));        /* warm gold */
+  --tg-btn: rgb(var(--accent-rgb));
+  --tg-border: rgba(var(--accent-rgb),0.10);
+  --tg-border-strong: rgba(var(--accent-rgb),0.22);
+  --tg-card-shadow: 0 12px 40px -16px rgba(var(--accent-rgb),0.10), 0 1px 0 rgba(255,255,255,0.02) inset;
+  --tg-accent: rgb(var(--accent-rgb));
+  --tg-accent-bright: rgb(var(--accent-bright-rgb));
+  --tg-accent-soft: rgba(var(--accent-rgb),0.14);
   /* Secondary accent — interactive/action elements (icons, CTA, active tab).
      Gold stays brand/identity; this colour signals "tappable" so cards stop
      blending while scrolling. Swap this one line to compare Vladimir's options:
      #06B6D4 cyan (current) · #8B5CF6 violet · #10B981 emerald */
-  --tg-icon: #06B6D4;
-  --tg-glow: 0 0 24px rgba(229,178,71,0.35);
-  --tg-glow-soft: 0 0 40px rgba(229,178,71,0.18);
+  --tg-icon: rgb(var(--accent-rgb));
+  --tg-glow: 0 0 24px rgba(var(--accent-rgb),0.35);
+  --tg-glow-soft: 0 0 40px rgba(var(--accent-rgb),0.18);
   --tg-locked-bg: rgba(255,255,255,0.02);
   --tg-locked-text: rgba(232,223,200,0.30);
 }
@@ -63,7 +66,7 @@ body::after {
   position: absolute;
   top: -1px; left: 16px; right: 16px;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(229,178,71,0.18), transparent);
+  background: linear-gradient(90deg, transparent, rgba(var(--accent-rgb),0.18), transparent);
   pointer-events: none;
 }
 .divider { border-color: var(--tg-border); }
@@ -71,22 +74,22 @@ body::after {
 /* Hero -- мягкий золотой фон без сетки */
 .hero-bg {
   background:
-    radial-gradient(ellipse 70% 90% at 50% 100%, rgba(229,178,71,0.18) 0%, transparent 60%),
-    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(229,178,71,0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 90% at 50% 100%, rgba(var(--accent-rgb),0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(var(--accent-rgb),0.05) 0%, transparent 60%),
     linear-gradient(180deg, #060709 0%, #0A0C10 100%);
   position: relative; overflow: hidden;
 }
 
 .glow { box-shadow: var(--tg-glow); }
 .glow-soft { box-shadow: var(--tg-glow-soft); }
-.text-glow { text-shadow: 0 0 18px rgba(229,178,71,0.55); }
+.text-glow { text-shadow: 0 0 18px rgba(var(--accent-rgb),0.55); }
 
 /* === Усиленный неон-стек === */
 .text-glow-strong {
   text-shadow:
-    0 0 8px rgba(229,178,71,0.65),
-    0 0 22px rgba(229,178,71,0.45),
-    0 0 44px rgba(229,178,71,0.22);
+    0 0 8px rgba(var(--accent-rgb),0.65),
+    0 0 22px rgba(var(--accent-rgb),0.45),
+    0 0 44px rgba(var(--accent-rgb),0.22);
 }
 .title-outline {
   -webkit-text-stroke: 1.2px #FFD27A;
@@ -95,8 +98,8 @@ body::after {
 }
 .neon-text {
   text-shadow:
-    0 0 6px rgba(229,178,71,0.55),
-    0 0 16px rgba(229,178,71,0.32);
+    0 0 6px rgba(var(--accent-rgb),0.55),
+    0 0 16px rgba(var(--accent-rgb),0.32);
 }
 .neon-text-soft {
   text-shadow: 0 0 10px rgba(232,223,200,0.18);
@@ -107,11 +110,11 @@ body::after {
 
 /* === Welcome guide card === */
 @keyframes welcomeGlow {
-  0%, 100% { box-shadow: var(--tg-card-shadow), 0 0 0 rgba(229,178,71,0); }
-  50% { box-shadow: var(--tg-card-shadow), 0 0 26px -4px rgba(229,178,71,0.22); }
+  0%, 100% { box-shadow: var(--tg-card-shadow), 0 0 0 rgba(var(--accent-rgb),0); }
+  50% { box-shadow: var(--tg-card-shadow), 0 0 26px -4px rgba(var(--accent-rgb),0.22); }
 }
 .welcome-glow { animation: welcomeGlow 5s ease-in-out infinite; }
-.welcome-step:hover { border-color: rgba(229,178,71,0.42) !important; }
+.welcome-step:hover { border-color: rgba(var(--accent-rgb),0.42) !important; }
 
 /* === Сцена со сковородой === */
 
@@ -145,8 +148,8 @@ body::after {
 
 /* неоновый обод сковороды */
 @keyframes panRimGlow {
-  0%, 100% { filter: drop-shadow(0 0 4px rgba(229,178,71,0.4)); }
-  50% { filter: drop-shadow(0 0 12px rgba(229,178,71,0.75)); }
+  0%, 100% { filter: drop-shadow(0 0 4px rgba(var(--accent-rgb),0.4)); }
+  50% { filter: drop-shadow(0 0 12px rgba(var(--accent-rgb),0.75)); }
 }
 .pan-glow { animation: panRimGlow 3s ease-in-out infinite; }
 
@@ -204,8 +207,8 @@ body::after {
 
 /* Border-glow — золотая граница "дышит" */
 @keyframes borderGlow {
-  0%, 100% { box-shadow: var(--tg-card-shadow), 0 0 0 rgba(229,178,71,0); }
-  50% { box-shadow: var(--tg-card-shadow), 0 0 22px -4px rgba(229,178,71,0.22); }
+  0%, 100% { box-shadow: var(--tg-card-shadow), 0 0 0 rgba(var(--accent-rgb),0); }
+  50% { box-shadow: var(--tg-card-shadow), 0 0 22px -4px rgba(var(--accent-rgb),0.22); }
 }
 
 /* Icon-float — плавный вертикальный дрейф */
@@ -222,8 +225,8 @@ body::after {
 
 /* Number glow — мерцание цифры 01-07 */
 @keyframes numberGlow {
-  0%, 100% { opacity: 0.55; text-shadow: 0 0 0 rgba(229,178,71,0); }
-  50% { opacity: 1; text-shadow: 0 0 12px rgba(229,178,71,0.45); }
+  0%, 100% { opacity: 0.55; text-shadow: 0 0 0 rgba(var(--accent-rgb),0); }
+  50% { opacity: 1; text-shadow: 0 0 12px rgba(var(--accent-rgb),0.45); }
 }
 
 .card-live {
@@ -235,7 +238,7 @@ body::after {
   inset: -50%;
   width: 60%;
   height: 220%;
-  background: linear-gradient(90deg, transparent 0%, rgba(229,178,71,0.18) 50%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, rgba(var(--accent-rgb),0.18) 50%, transparent 100%);
   filter: blur(8px);
   pointer-events: none;
   animation: cardShimmer 7s ease-in-out infinite;

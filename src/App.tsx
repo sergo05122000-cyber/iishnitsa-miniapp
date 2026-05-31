@@ -67,8 +67,8 @@ function PanScene({ className = '' }: { className?: string }) {
           <stop offset="100%" stopColor="#9C6614" />
         </radialGradient>
         <radialGradient id="ps-yolkGlow" cx="50%" cy="50%" r="60%">
-          <stop offset="0%" stopColor="rgba(255,210,122,0.55)" />
-          <stop offset="100%" stopColor="rgba(229,178,71,0)" />
+          <stop offset="0%" stopColor="rgba(var(--accent-bright-rgb),0.55)" />
+          <stop offset="100%" stopColor="rgba(var(--accent-rgb),0)" />
         </radialGradient>
         <linearGradient id="ps-pan" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#1a1208" />
@@ -93,7 +93,7 @@ function PanScene({ className = '' }: { className?: string }) {
         <path
           d="M40 130 Q 40 180, 80 192 L 200 192 Q 240 180, 240 130 Z"
           fill="url(#ps-pan)"
-          stroke="rgba(229,178,71,0.9)"
+          stroke="rgba(var(--accent-rgb),0.9)"
           strokeWidth="1.8"
         />
 
@@ -101,7 +101,7 @@ function PanScene({ className = '' }: { className?: string }) {
         <path
           d="M225 170 L 252 168 L 252 196 L 225 194 Z"
           fill="url(#ps-pan)"
-          stroke="rgba(229,178,71,0.95)"
+          stroke="rgba(var(--accent-rgb),0.95)"
           strokeWidth="1.6"
         />
         <circle cx="232" cy="176" r="2" fill="#E5B247" />
@@ -113,16 +113,16 @@ function PanScene({ className = '' }: { className?: string }) {
         <path
           d="M250 174 L 308 184 Q 316 187, 316 192 Q 316 197, 308 200 L 250 196 Z"
           fill="url(#ps-pan)"
-          stroke="rgba(229,178,71,0.9)"
+          stroke="rgba(var(--accent-rgb),0.9)"
           strokeWidth="1.6"
         />
         {/* блик на ручке */}
-        <path d="M254 178 L 304 188" stroke="rgba(229,178,71,0.4)" strokeWidth="0.8" fill="none" />
+        <path d="M254 178 L 304 188" stroke="rgba(var(--accent-rgb),0.4)" strokeWidth="0.8" fill="none" />
 
         {/* верхний край (ободок) */}
-        <ellipse cx="140" cy="130" rx="100" ry="22" fill="#0a0805" stroke="rgba(229,178,71,1)" strokeWidth="2.2" className="pan-glow" />
+        <ellipse cx="140" cy="130" rx="100" ry="22" fill="#0a0805" stroke="rgba(var(--accent-rgb),1)" strokeWidth="2.2" className="pan-glow" />
         {/* внутренний ободок */}
-        <ellipse cx="140" cy="130" rx="92" ry="18" fill="#1a1208" stroke="rgba(229,178,71,0.4)" strokeWidth="0.8" />
+        <ellipse cx="140" cy="130" rx="92" ry="18" fill="#1a1208" stroke="rgba(var(--accent-rgb),0.4)" strokeWidth="0.8" />
 
         {/* === HAND — кисть с пальцами поверх ручки === */}
         <g className="hand-group">
@@ -130,7 +130,7 @@ function PanScene({ className = '' }: { className?: string }) {
           <path
             d="M322 165 L 360 158 L 360 215 L 322 212 Z"
             fill="url(#ps-skin)"
-            stroke="rgba(229,178,71,0.6)"
+            stroke="rgba(var(--accent-rgb),0.6)"
             strokeWidth="1.4"
           />
           {/* Ладонь обхватывает ручку */}
@@ -142,7 +142,7 @@ function PanScene({ className = '' }: { className?: string }) {
                L 324 165
                Q 300 162, 276 170 Z"
             fill="url(#ps-skin)"
-            stroke="rgba(229,178,71,0.78)"
+            stroke="rgba(var(--accent-rgb),0.78)"
             strokeWidth="1.5"
           />
           {/* Большой палец — сверху ручки, обхватывает её */}
@@ -153,26 +153,26 @@ function PanScene({ className = '' }: { className?: string }) {
                Q 318 168, 312 176
                L 296 180 Z"
             fill="url(#ps-skin)"
-            stroke="rgba(229,178,71,0.85)"
+            stroke="rgba(var(--accent-rgb),0.85)"
             strokeWidth="1.4"
           />
           {/* 4 пальца снизу-спереди обхватывают ручку */}
-          <g stroke="rgba(229,178,71,0.7)" strokeWidth="1.2" fill="url(#ps-skin)">
+          <g stroke="rgba(var(--accent-rgb),0.7)" strokeWidth="1.2" fill="url(#ps-skin)">
             <ellipse cx="280" cy="200" rx="4.2" ry="7" />
             <ellipse cx="290" cy="206" rx="4.2" ry="7" />
             <ellipse cx="300" cy="208" rx="4.2" ry="7" />
             <ellipse cx="310" cy="208" rx="4.2" ry="6" />
           </g>
           {/* Линии-разделители пальцев (видны на верхней стороне ладони) */}
-          <path d="M284 192 Q 285 184, 286 176" stroke="rgba(229,178,71,0.3)" strokeWidth="0.8" fill="none" />
-          <path d="M294 196 Q 295 188, 296 178" stroke="rgba(229,178,71,0.3)" strokeWidth="0.8" fill="none" />
-          <path d="M304 198 Q 305 190, 306 178" stroke="rgba(229,178,71,0.3)" strokeWidth="0.8" fill="none" />
+          <path d="M284 192 Q 285 184, 286 176" stroke="rgba(var(--accent-rgb),0.3)" strokeWidth="0.8" fill="none" />
+          <path d="M294 196 Q 295 188, 296 178" stroke="rgba(var(--accent-rgb),0.3)" strokeWidth="0.8" fill="none" />
+          <path d="M304 198 Q 305 190, 306 178" stroke="rgba(var(--accent-rgb),0.3)" strokeWidth="0.8" fill="none" />
           {/* Костяшки-блики */}
           <ellipse cx="280" cy="194" rx="2" ry="1.2" fill="rgba(255,225,180,0.45)" />
           <ellipse cx="290" cy="200" rx="2" ry="1.2" fill="rgba(255,225,180,0.45)" />
           <ellipse cx="300" cy="202" rx="2" ry="1.2" fill="rgba(255,225,180,0.45)" />
           {/* Граница запястья */}
-          <path d="M322 165 Q 320 188, 322 212" stroke="rgba(229,178,71,0.45)" strokeWidth="1" fill="none" />
+          <path d="M322 165 Q 320 188, 322 212" stroke="rgba(var(--accent-rgb),0.45)" strokeWidth="1" fill="none" />
         </g>
 
         {/* === ЯИЧНИЦА В СКОВОРОДЕ === */}
@@ -195,7 +195,7 @@ function PanScene({ className = '' }: { className?: string }) {
         />
 
         {/* Желток */}
-        <ellipse cx="135" cy="130" rx="18" ry="10" fill="url(#ps-yolk)" className="yolk-main" stroke="rgba(229,178,71,0.7)" strokeWidth="0.6" />
+        <ellipse cx="135" cy="130" rx="18" ry="10" fill="url(#ps-yolk)" className="yolk-main" stroke="rgba(var(--accent-rgb),0.7)" strokeWidth="0.6" />
         {/* блик на желтке */}
         <ellipse cx="128" cy="126" rx="5" ry="2.6" fill="rgba(255,255,255,0.55)" />
 
@@ -257,11 +257,11 @@ function StatChip({ label, value, accent }: { label: string; value: number; acce
   return (
     <div className={`p-3 rounded-lg border ${accent ? 'neon-border' : ''}`} style={{
       background: 'rgba(14,16,20,0.6)',
-      borderColor: accent ? 'rgba(229,178,71,0.55)' : 'rgba(229,178,71,0.16)',
+      borderColor: accent ? 'rgba(var(--accent-rgb),0.55)' : 'rgba(var(--accent-rgb),0.16)',
       backdropFilter: 'blur(6px)',
       boxShadow: accent
-        ? '0 0 22px -4px rgba(229,178,71,0.32), inset 0 0 16px rgba(229,178,71,0.05)'
-        : '0 0 14px -6px rgba(229,178,71,0.16), inset 0 0 10px rgba(229,178,71,0.03)',
+        ? '0 0 22px -4px rgba(var(--accent-rgb),0.32), inset 0 0 16px rgba(var(--accent-rgb),0.05)'
+        : '0 0 14px -6px rgba(var(--accent-rgb),0.16), inset 0 0 10px rgba(var(--accent-rgb),0.03)',
     }}>
       <div className={`font-display font-bold text-[22px] tabular-nums leading-none ${accent ? 'neon-text' : 'neon-text-soft'}`}
         style={{ color: accent ? 'var(--tg-accent)' : 'var(--tg-text)' }}>
@@ -294,10 +294,10 @@ function FolderCard({ f, index, onOpen }: { f: Folder; index: number; onOpen: ()
       {/* Icon block */}
       <div className="card-icon w-11 h-11 rounded-lg border flex items-center justify-center"
         style={{
-          borderColor: locked ? 'var(--tg-border)' : 'rgba(6,182,212,0.34)',
-          background: locked ? 'transparent' : 'rgba(6,182,212,0.07)',
+          borderColor: locked ? 'var(--tg-border)' : 'rgba(var(--accent-rgb),0.34)',
+          background: locked ? 'transparent' : 'rgba(var(--accent-rgb),0.07)',
           color: locked ? 'var(--tg-locked-text)' : 'var(--tg-icon)',
-          boxShadow: locked ? undefined : '0 0 18px rgba(6,182,212,0.10), inset 0 0 12px rgba(6,182,212,0.05)',
+          boxShadow: locked ? undefined : '0 0 18px rgba(var(--accent-rgb),0.10), inset 0 0 12px rgba(var(--accent-rgb),0.05)',
         }}>
         <FolderIcon name={f.icon} className="w-[20px] h-[20px]" stroke={1.5} />
       </div>
@@ -334,7 +334,7 @@ function PostRow({ p, index, onOpen }: { p: Post; index: number; onOpen: () => v
       <div className="flex items-center justify-between text-[10px] font-mono uppercase tracking-[0.18em]">
         <span style={{ color: 'var(--tg-accent)' }}>{TYPE_LABEL[p.type]}</span>
         <div className="flex items-center gap-2 text-tg-hint">
-          {p.pinned && <span className="px-1.5 py-0.5 rounded border" style={{ borderColor: 'rgba(229,178,71,0.32)', color: 'var(--tg-accent)' }}>PIN</span>}
+          {p.pinned && <span className="px-1.5 py-0.5 rounded border" style={{ borderColor: 'rgba(var(--accent-rgb),0.32)', color: 'var(--tg-accent)' }}>PIN</span>}
           <span>{p.date}</span>
         </div>
       </div>
@@ -383,7 +383,7 @@ function WelcomeGuide({ onOpen }: { onOpen: (id: string) => void }) {
 
   return (
     <div className="px-5 pt-6 fade-up" style={{ animationDelay: '260ms' }}>
-      <div className="card relative p-5 overflow-hidden welcome-glow" style={{ background: 'linear-gradient(180deg, rgba(229,178,71,0.06) 0%, var(--tg-sec) 60%)' }}>
+      <div className="card relative p-5 overflow-hidden welcome-glow" style={{ background: 'linear-gradient(180deg, rgba(var(--accent-rgb),0.06) 0%, var(--tg-sec) 60%)' }}>
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -403,7 +403,7 @@ function WelcomeGuide({ onOpen }: { onOpen: (id: string) => void }) {
               onClick={() => onOpen(s.target)}
               className="group flex items-start gap-3 p-3 rounded-lg border text-left active:scale-[0.98] transition-all welcome-step"
               style={{
-                borderColor: 'rgba(229,178,71,0.18)',
+                borderColor: 'rgba(var(--accent-rgb),0.18)',
                 background: 'rgba(14,16,20,0.5)',
               }}
             >
@@ -414,10 +414,10 @@ function WelcomeGuide({ onOpen }: { onOpen: (id: string) => void }) {
               {/* Иконка */}
               <div className="shrink-0 w-9 h-9 rounded-lg border flex items-center justify-center"
                 style={{
-                  borderColor: 'rgba(6,182,212,0.34)',
-                  background: 'rgba(6,182,212,0.07)',
+                  borderColor: 'rgba(var(--accent-rgb),0.34)',
+                  background: 'rgba(var(--accent-rgb),0.07)',
                   color: 'var(--tg-icon)',
-                  boxShadow: '0 0 14px rgba(6,182,212,0.10), inset 0 0 10px rgba(6,182,212,0.05)',
+                  boxShadow: '0 0 14px rgba(var(--accent-rgb),0.10), inset 0 0 10px rgba(var(--accent-rgb),0.05)',
                 }}>
                 {s.icon}
               </div>
@@ -514,7 +514,7 @@ function PostView({ folderId, postId, onBack }: { folderId: string; postId: stri
       <div className="px-5 py-6 pb-24 fade-up">
         <div className="flex items-center gap-2 mb-3 text-[10px] font-mono uppercase tracking-[0.2em]">
           <span style={{ color: 'var(--tg-accent)' }}>{TYPE_LABEL[p.type]}</span>
-          {p.pinned && <span className="px-1.5 py-0.5 rounded border" style={{ borderColor: 'rgba(229,178,71,0.32)', color: 'var(--tg-accent)' }}>PIN</span>}
+          {p.pinned && <span className="px-1.5 py-0.5 rounded border" style={{ borderColor: 'rgba(var(--accent-rgb),0.32)', color: 'var(--tg-accent)' }}>PIN</span>}
         </div>
         <h1 className="font-display font-bold text-[26px] leading-[1.05] mb-4 uppercase tracking-wide">{p.title}</h1>
 
@@ -528,7 +528,7 @@ function PostView({ folderId, postId, onBack }: { folderId: string; postId: stri
         {p.fileUrl && (
           <div className="card p-4 my-6 flex items-center gap-3">
             <div className="w-12 h-12 rounded-lg border flex items-center justify-center shrink-0"
-              style={{ borderColor: 'rgba(229,178,71,0.32)', background: 'rgba(229,178,71,0.06)', color: 'var(--tg-accent)' }}>
+              style={{ borderColor: 'rgba(var(--accent-rgb),0.32)', background: 'rgba(var(--accent-rgb),0.06)', color: 'var(--tg-accent)' }}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
             </div>
             <div className="flex-1 min-w-0">
@@ -537,7 +537,7 @@ function PostView({ folderId, postId, onBack }: { folderId: string; postId: stri
             </div>
             <a href={p.fileUrl} download={p.fileName}
               className="shrink-0 px-3.5 py-2 rounded-lg font-mono font-bold text-[10px] uppercase tracking-wider active:scale-95 transition flex items-center gap-1.5 border"
-              style={{ background: 'rgba(229,178,71,0.12)', borderColor: 'rgba(229,178,71,0.32)', color: 'var(--tg-accent)' }}>
+              style={{ background: 'rgba(var(--accent-rgb),0.12)', borderColor: 'rgba(var(--accent-rgb),0.32)', color: 'var(--tg-accent)' }}>
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
               Download
             </a>
@@ -548,10 +548,10 @@ function PostView({ folderId, postId, onBack }: { folderId: string; postId: stri
           onClick={() => openTgLink(tgLink)}
           className="w-full py-3.5 rounded-lg font-display font-bold text-[13px] uppercase tracking-[0.16em] active:scale-[0.98] transition flex items-center justify-center gap-2 mt-4 border-2"
           style={{
-            background: 'rgba(229,178,71,0.08)',
-            borderColor: 'rgba(229,178,71,0.36)',
+            background: 'rgba(var(--accent-rgb),0.08)',
+            borderColor: 'rgba(var(--accent-rgb),0.36)',
             color: 'var(--tg-accent)',
-            boxShadow: '0 0 20px rgba(229,178,71,0.18), inset 0 1px 0 rgba(255,255,255,0.06)',
+            boxShadow: '0 0 20px rgba(var(--accent-rgb),0.18), inset 0 1px 0 rgba(255,255,255,0.06)',
           }}>
           Открыть в Telegram
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
@@ -692,6 +692,35 @@ export function App() {
       }
     } catch {}
   }, [])
+
+  // Scroll-driven accent: gold at the top (hero stays "стильно"), smoothly
+  // lerping to cyan as you scroll down, and back to gold on the way up.
+  // Drives the single --accent-rgb var that every accent colour now reads from.
+  useEffect(() => {
+    const GOLD = [229, 178, 71], CYAN = [6, 182, 212]
+    const GOLD_B = [255, 210, 122], CYAN_B = [110, 232, 245]
+    let raf = 0
+    const apply = () => {
+      raf = 0
+      const el = document.scrollingElement || document.documentElement
+      const max = el.scrollHeight - el.clientHeight
+      const p = max > 4 ? Math.min(1, Math.max(0, el.scrollTop / max)) : 0
+      const f = (a: number, b: number) => Math.round(a + (b - a) * p)
+      const mix = (A: number[], B: number[]) => `${f(A[0], B[0])}, ${f(A[1], B[1])}, ${f(A[2], B[2])}`
+      const root = document.documentElement.style
+      root.setProperty('--accent-rgb', mix(GOLD, CYAN))
+      root.setProperty('--accent-bright-rgb', mix(GOLD_B, CYAN_B))
+    }
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(apply) }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
+    apply()
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+      if (raf) cancelAnimationFrame(raf)
+    }
+  }, [view, tab])
 
   const body = useMemo(() => {
     if (tab !== 'folders') {
