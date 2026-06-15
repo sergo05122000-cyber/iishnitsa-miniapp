@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { folders, channelName, channelSubtitle, tgUrlFor, TG_QUESTIONS_TOPIC, type Folder, type Post } from './data'
+import { folders, channelName, channelSubtitle, tgUrlFor, TG_QUESTIONS_TOPIC, type Folder, type Post, type LessonTimecode, type LessonStep, type LessonService, type LessonRepo } from './data'
 import { IntroForm } from './IntroForm'
 
 /** Open a Telegram link safely from within Telegram WebApp (or just window.open as fallback). */
@@ -35,6 +35,7 @@ function FolderIcon({ name, className = 'w-6 h-6', stroke = 1.4 }: { name: strin
     case 'book': return <svg {...common}><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
     case 'users': return <svg {...common}><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
     case 'help': return <svg {...common}><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    case 'play': return <svg {...common}><polygon points="5 3 19 12 5 21 5 3"/></svg>
     default: return null
   }
 }
@@ -444,9 +445,42 @@ function WelcomeGuide({ onOpen }: { onOpen: (id: string) => void }) {
   )
 }
 
+function FolderRow({ f, index, onOpen }: { f: Folder; index: number; onOpen: () => void }) {
+  const locked = !!f.closed
+  return (
+    <button
+      onClick={onOpen}
+      style={{ animationDelay: `${index * 50}ms` }}
+      className={`fade-up card w-full text-left p-3.5 flex items-center gap-3 active:scale-[0.98] transition-all ${locked ? 'opacity-50' : ''}`}
+    >
+      <div className="shrink-0 w-11 h-11 rounded-lg border flex items-center justify-center"
+        style={{
+          borderColor: locked ? 'var(--tg-border)' : 'rgba(var(--accent-rgb),0.34)',
+          background: locked ? 'transparent' : 'rgba(var(--accent-rgb),0.07)',
+          color: locked ? 'var(--tg-locked-text)' : 'var(--tg-icon)',
+        }}>
+        <FolderIcon name={f.icon} className="w-[18px] h-[18px]" stroke={1.5} />
+      </div>
+      <div className="flex-1 min-w-0">
+        <div className={`font-display font-bold text-[15px] uppercase tracking-wide leading-tight ${locked ? 'text-tg-locked-text' : 'text-tg-text'}`}>
+          {f.title}
+        </div>
+        <div className={`text-[11px] mt-0.5 font-mono uppercase tracking-wider ${locked ? 'text-tg-locked-text' : 'text-tg-hint'}`}>
+          {locked ? '— —' : `${String(f.posts.length).padStart(2, '0')} ПОСТ${f.posts.length === 1 ? '' : 'ОВ'}`}
+        </div>
+      </div>
+      {locked
+        ? <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="shrink-0 text-tg-locked-text"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        : <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="shrink-0" style={{ color: 'var(--tg-icon)' }}><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      }
+    </button>
+  )
+}
+
 function HomeView({ onOpen }: { onOpen: (id: string) => void }) {
   const totalPosts = folders.reduce((s, f) => s + f.posts.length, 0)
   const openCount = folders.filter(f => !f.closed).length
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
 
   return (
     <>
@@ -457,13 +491,37 @@ function HomeView({ onOpen }: { onOpen: (id: string) => void }) {
           <h2 className="font-display font-bold text-[12px] uppercase tracking-[0.22em]" style={{ color: 'var(--tg-accent)' }}>
             <span className="opacity-50 mr-2">/</span>Разделы
           </h2>
-          <span className="font-mono text-[10px] uppercase tracking-wider text-tg-hint">
-            {String(folders.length).padStart(2, '0')} / 07
-          </span>
+          <div className="flex items-center gap-1.5">
+            <button
+              onClick={() => setViewMode('grid')}
+              className="w-8 h-8 rounded-lg border flex items-center justify-center transition-all"
+              style={{
+                borderColor: viewMode === 'grid' ? 'rgba(var(--accent-rgb),0.6)' : 'var(--tg-border)',
+                background: viewMode === 'grid' ? 'rgba(var(--accent-rgb),0.12)' : 'transparent',
+                color: viewMode === 'grid' ? 'var(--tg-accent)' : 'var(--tg-hint)',
+              }}>
+              <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><rect x="0" y="0" width="6" height="6" rx="1.5" fill="currentColor"/><rect x="8" y="0" width="6" height="6" rx="1.5" fill="currentColor"/><rect x="0" y="8" width="6" height="6" rx="1.5" fill="currentColor"/><rect x="8" y="8" width="6" height="6" rx="1.5" fill="currentColor"/></svg>
+            </button>
+            <button
+              onClick={() => setViewMode('list')}
+              className="w-8 h-8 rounded-lg border flex items-center justify-center transition-all"
+              style={{
+                borderColor: viewMode === 'list' ? 'rgba(var(--accent-rgb),0.6)' : 'var(--tg-border)',
+                background: viewMode === 'list' ? 'rgba(var(--accent-rgb),0.12)' : 'transparent',
+                color: viewMode === 'list' ? 'var(--tg-accent)' : 'var(--tg-hint)',
+              }}>
+              <svg width="13" height="10" viewBox="0 0 14 10" fill="none"><rect x="0" y="0" width="14" height="2" rx="1" fill="currentColor"/><rect x="0" y="4" width="14" height="2" rx="1" fill="currentColor"/><rect x="0" y="8" width="14" height="2" rx="1" fill="currentColor"/></svg>
+            </button>
+          </div>
         </div>
-        <div className="grid grid-cols-2 gap-3">
-          {folders.map((f, i) => <FolderCard key={f.id} f={f} index={i} onOpen={() => onOpen(f.id)} />)}
-        </div>
+        {viewMode === 'grid'
+          ? <div className="grid grid-cols-2 gap-3">
+              {folders.map((f, i) => <FolderCard key={f.id} f={f} index={i} onOpen={() => onOpen(f.id)} />)}
+            </div>
+          : <div className="flex flex-col gap-2.5">
+              {folders.map((f, i) => <FolderRow key={f.id} f={f} index={i} onOpen={() => onOpen(f.id)} />)}
+            </div>
+        }
       </div>
     </>
   )
@@ -502,11 +560,181 @@ function openTgLink(url: string) {
   else window.open(url, '_blank')
 }
 
+function CopyButton({ text }: { text: string }) {
+  const [copied, setCopied] = useState(false)
+  const copy = () => {
+    navigator.clipboard.writeText(text).catch(() => {})
+    setCopied(true)
+    setTimeout(() => setCopied(false), 1800)
+  }
+  return (
+    <button onClick={copy}
+      className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-mono font-bold text-[10px] uppercase tracking-wider active:scale-95 transition border"
+      style={{ background: 'rgba(var(--accent-rgb),0.12)', borderColor: 'rgba(var(--accent-rgb),0.32)', color: 'var(--tg-accent)' }}>
+      {copied
+        ? <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        : <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      }
+      {copied ? 'Скопировано' : 'Скопировать'}
+    </button>
+  )
+}
+
+function LessonSectionLabel({ text }: { text: string }) {
+  return (
+    <div className="flex items-center gap-2 mb-3">
+      <span className="w-2 h-2 rounded-sm shrink-0" style={{ background: 'var(--tg-accent)' }} />
+      <span className="font-mono text-[11px] uppercase tracking-[0.22em]" style={{ color: 'var(--tg-hint)' }}>{text}</span>
+    </div>
+  )
+}
+
+function LessonPostBody({ p }: { p: Post }) {
+  const hasStructure = !!(p.timecodes || p.goal || p.steps || p.services || p.repos)
+
+  if (!hasStructure) {
+    const bodyParagraphs = (p.body ?? '').trim().split(/\n\n+/).filter(Boolean)
+    return (
+      <div className="text-[14px] leading-relaxed space-y-3" style={{ color: 'var(--tg-text)' }}>
+        <p className="text-tg-hint">{p.excerpt}</p>
+        {bodyParagraphs.length > 0
+          ? bodyParagraphs.map((para, i) => <p key={i} className="whitespace-pre-line">{para}</p>)
+          : <p>Здесь будет полный текст урока.</p>}
+      </div>
+    )
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* ЦЕЛЬ */}
+      {p.goal && (
+        <div className="card p-4 border-l-4 rounded-l-none" style={{ borderLeftColor: 'var(--tg-accent)' }}>
+          <LessonSectionLabel text="Цель" />
+          <p className="text-[15px] leading-snug font-medium" style={{ color: 'var(--tg-text)' }}>{p.goal}</p>
+        </div>
+      )}
+
+      {/* РЕЗУЛЬТАТ */}
+      {p.result && (
+        <div className="card p-4 border-l-4 rounded-l-none"
+          style={{ borderLeftColor: 'var(--tg-accent)', background: 'rgba(var(--accent-rgb),0.06)' }}>
+          <LessonSectionLabel text="Результат" />
+          <p className="text-[15px] leading-snug font-medium" style={{ color: 'var(--tg-text)' }}>{p.result}</p>
+        </div>
+      )}
+
+      {/* ОПИСАНИЕ */}
+      {p.description && (
+        <div>
+          <LessonSectionLabel text="Описание" />
+          <div className="space-y-3">
+            {p.description.split(/\n\n+/).map((para, i) => (
+              <p key={i} className={`leading-relaxed ${i === 0 ? 'text-[16px] font-semibold' : 'text-[14px] text-tg-hint'}`}
+                style={{ color: i === 0 ? 'var(--tg-text)' : undefined }}>
+                {para}
+              </p>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ПОШАГОВЫЕ ДЕЙСТВИЯ */}
+      {p.steps && p.steps.length > 0 && (
+        <div>
+          <LessonSectionLabel text="Пошаговые действия" />
+          <div className="space-y-4">
+            {(p.steps as LessonStep[]).map((step, i) => (
+              <div key={i} className="flex items-start gap-3">
+                <span className="shrink-0 w-8 h-8 rounded-full border-2 flex items-center justify-center font-display font-bold text-[14px]"
+                  style={{ borderColor: 'var(--tg-accent)', color: 'var(--tg-accent)', background: 'rgba(var(--accent-rgb),0.08)' }}>
+                  {i + 1}
+                </span>
+                <div className="flex-1 min-w-0 pt-0.5">
+                  <p className="text-[14px] font-medium leading-snug mb-2" style={{ color: 'var(--tg-text)' }}>{step.text}</p>
+                  {step.command && (
+                    <div className="card rounded-lg overflow-hidden">
+                      <div className="flex items-center justify-between px-3 py-2 border-b" style={{ borderColor: 'var(--tg-border)' }}>
+                        <div className="flex items-center gap-1.5">
+                          <span className="w-1.5 h-1.5 rounded-sm" style={{ background: 'var(--tg-accent)' }} />
+                          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-tg-hint">Команда</span>
+                        </div>
+                        <CopyButton text={step.command} />
+                      </div>
+                      <pre className="px-3 py-3 text-[12px] font-mono leading-relaxed whitespace-pre-wrap break-all"
+                        style={{ color: 'var(--tg-accent)' }}>
+                        {step.command}
+                      </pre>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* СЕРВИСЫ */}
+      {p.services && p.services.length > 0 && (
+        <div>
+          <LessonSectionLabel text="Сервисы" />
+          <div className="card divide-y" style={{ '--divide-color': 'var(--tg-border)' } as any}>
+            {(p.services as LessonService[]).map((svc, i) => (
+              <button key={i}
+                onClick={() => svc.url && openTelegram(svc.url)}
+                className="w-full flex items-center gap-3 px-4 py-3.5 text-left active:bg-white/5 transition">
+                <div className="shrink-0 w-8 h-8 rounded-lg border flex items-center justify-center"
+                  style={{ borderColor: 'rgba(var(--accent-rgb),0.24)', background: 'rgba(var(--accent-rgb),0.06)', color: 'var(--tg-icon)' }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                  </svg>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="font-display font-bold text-[14px] leading-tight" style={{ color: 'var(--tg-text)' }}>{svc.name}</div>
+                  <div className="font-mono text-[10px] mt-0.5 uppercase tracking-wider text-tg-hint">{svc.desc}</div>
+                </div>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 text-tg-hint"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* РЕПОЗИТОРИИ */}
+      {p.repos && p.repos.length > 0 && (
+        <div>
+          <LessonSectionLabel text="Репозитории" />
+          <div className="card divide-y" style={{ '--divide-color': 'var(--tg-border)' } as any}>
+            {(p.repos as LessonRepo[]).map((repo, i) => {
+              const shortUrl = repo.url.replace('https://', '')
+              return (
+                <button key={i}
+                  onClick={() => openTelegram(repo.url)}
+                  className="w-full flex items-center gap-3 px-4 py-3.5 text-left active:bg-white/5 transition">
+                  <div className="shrink-0 w-8 h-8 rounded-lg border flex items-center justify-center"
+                    style={{ borderColor: 'rgba(var(--accent-rgb),0.24)', background: 'rgba(var(--accent-rgb),0.06)', color: 'var(--tg-icon)' }}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.66-.3-5.46-1.33-5.46-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-display font-bold text-[14px] leading-tight" style={{ color: 'var(--tg-text)' }}>{repo.name}</div>
+                    <div className="font-mono text-[10px] mt-0.5 tracking-wide text-tg-hint truncate">{shortUrl}</div>
+                  </div>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 text-tg-hint"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
 function PostView({ folderId, postId, onBack }: { folderId: string; postId: string; onBack: () => void }) {
   const f = folders.find(x => x.id === folderId)!
   const p = f.posts.find(x => x.id === postId)!
-  const bodyParagraphs = (p.body ?? '').trim().split(/\n\n+/).filter(Boolean)
   const tgLink = p.tgUrl || tgUrlFor(f.tgChannel)
+  const isLesson = !!(p.timecodes || p.goal || p.steps || p.services || p.repos)
 
   return (
     <>
@@ -516,14 +744,9 @@ function PostView({ folderId, postId, onBack }: { folderId: string; postId: stri
           <span style={{ color: 'var(--tg-accent)' }}>{TYPE_LABEL[p.type]}</span>
           {p.pinned && <span className="px-1.5 py-0.5 rounded border" style={{ borderColor: 'rgba(var(--accent-rgb),0.32)', color: 'var(--tg-accent)' }}>PIN</span>}
         </div>
-        <h1 className="font-display font-bold text-[26px] leading-[1.05] mb-4 uppercase tracking-wide">{p.title}</h1>
+        <h1 className="font-display font-bold text-[26px] leading-[1.05] mb-6 uppercase tracking-wide">{p.title}</h1>
 
-        <div className="text-[14px] leading-relaxed space-y-3" style={{ color: 'var(--tg-text)' }}>
-          <p className="text-tg-hint">{p.excerpt}</p>
-          {bodyParagraphs.length > 0
-            ? bodyParagraphs.map((para, i) => <p key={i} className="whitespace-pre-line">{para}</p>)
-            : <p>Здесь будет полный текст поста из ИИшницы — картинки, видео, голосовые, файлы, ссылки на источники.</p>}
-        </div>
+        <LessonPostBody p={p} />
 
         {p.fileUrl && (
           <div className="card p-4 my-6 flex items-center gap-3">
@@ -544,18 +767,20 @@ function PostView({ folderId, postId, onBack }: { folderId: string; postId: stri
           </div>
         )}
 
-        <button
-          onClick={() => openTgLink(tgLink)}
-          className="w-full py-3.5 rounded-lg font-display font-bold text-[13px] uppercase tracking-[0.16em] active:scale-[0.98] transition flex items-center justify-center gap-2 mt-4 border-2"
-          style={{
-            background: 'rgba(var(--accent-rgb),0.08)',
-            borderColor: 'rgba(var(--accent-rgb),0.36)',
-            color: 'var(--tg-accent)',
-            boxShadow: '0 0 20px rgba(var(--accent-rgb),0.18), inset 0 1px 0 rgba(255,255,255,0.06)',
-          }}>
-          Открыть в Telegram
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
-        </button>
+        {!isLesson && (
+          <button
+            onClick={() => openTgLink(tgLink)}
+            className="w-full py-3.5 rounded-lg font-display font-bold text-[13px] uppercase tracking-[0.16em] active:scale-[0.98] transition flex items-center justify-center gap-2 mt-4 border-2"
+            style={{
+              background: 'rgba(var(--accent-rgb),0.08)',
+              borderColor: 'rgba(var(--accent-rgb),0.36)',
+              color: 'var(--tg-accent)',
+              boxShadow: '0 0 20px rgba(var(--accent-rgb),0.18), inset 0 1px 0 rgba(255,255,255,0.06)',
+            }}>
+            Открыть в Telegram
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+          </button>
+        )}
       </div>
     </>
   )

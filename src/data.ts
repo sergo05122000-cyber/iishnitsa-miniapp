@@ -1,3 +1,8 @@
+export type LessonTimecode = { time: string; text: string }
+export type LessonStep = { text: string; command?: string }
+export type LessonService = { name: string; desc: string; url?: string }
+export type LessonRepo = { name: string; url: string }
+
 export type Post = {
   id: string
   title: string
@@ -10,6 +15,14 @@ export type Post = {
   fileName?: string
   fileSize?: string
   tgUrl?: string  // прямая ссылка на сообщение в TG (https://t.me/<channel>/<msg_id>)
+  // Structured lesson fields
+  goal?: string
+  result?: string
+  description?: string
+  timecodes?: LessonTimecode[]
+  steps?: LessonStep[]
+  services?: LessonService[]
+  repos?: LessonRepo[]
 }
 export type Folder = {
   id: string
@@ -44,7 +57,7 @@ const BASE = '/'
 const asset = (p: string) => `${BASE}${p}`
 
 export const channelName = 'ИИшница'
-export const channelSubtitle = '7 разделов клуба'
+export const channelSubtitle = '8 разделов клуба'
 
 export const folders: Folder[] = [
   {
@@ -128,9 +141,258 @@ export const folders: Folder[] = [
     ],
   },
   {
+    id: 'lessons', icon: 'play', title: 'Уроки', subtitle: 'Практические гайды из личного опыта',
+    count: 0, accent: 'from-blue-500 to-cyan-500',
+    posts: [
+      {
+        id: 'lesson-claude-code-setup',
+        title: 'Claude Code: базовый сетап',
+        excerpt: 'Как поставить и настроить Claude Code с нуля: установка через npm, создание CLAUDE.md, базовые скиллы GSD / Claude Mem / ECC, правила и хуки.',
+        date: dayBack(0),
+        type: 'text',
+        pinned: true,
+        goal: 'Поставить Claude Code и запустить первого агента в терминале.',
+        result: 'Агент работает, читает CLAUDE.md, знает твои правила и держит контекст между задачами.',
+        description: 'Когда я впервые запустил Claude Code, понял: это не чат-бот. Он живёт в терминале и сам делает работу — пишет код, правит файлы, запускает команды. Ты говоришь задачу словами, он разбирается.\n\nCLAUDE.md — первое, что читает агент. Один файл: проект, стек, правила, тон. Короткий и честный CLAUDE.md работает лучше страницы инструкций. Скиллы — надстройки под конкретный тип работы. GSD доводит задачу до конца, Claude Mem помнит прошлые сессии, ECC проверяет результат перед сдачей.',
+        timecodes: [
+          { time: '00:00', text: 'Что такое Claude Code и зачем он нужен. Агент живёт прямо в твоём терминале.' },
+          { time: '01:20', text: 'Установка через npm. Проверяем, что работает из России.' },
+          { time: '03:05', text: 'Создаём CLAUDE.md — паспорт проекта: стек, правила, тон ответов.' },
+          { time: '05:40', text: 'Ставим базовые скиллы: GSD, Claude Mem, ECC. Что каждый делает.' },
+          { time: '08:10', text: 'Правила и хуки: как заставить агента соблюдать твой формат.' },
+        ],
+        steps: [
+          { text: 'Установи Claude Code. Одной командой через npm.', command: 'npm install -g @anthropic-ai/claude-code' },
+          { text: 'Создай CLAUDE.md. «Паспорт» проекта для агента.', command: 'Создай CLAUDE.md: опиши проект, стек, правила работы и тон ответов. Держи его коротким.' },
+          { text: 'Поставь базовые скиллы. GSD, Claude Mem, ECC.' },
+          { text: 'Проверь правила и хуки. Агент должен соблюдать твой формат ответов.' },
+        ],
+        services: [
+          { name: 'Claude Code', desc: 'агент в терминале', url: 'https://claude.ai/claude-code' },
+          { name: 'Node.js', desc: 'нужен для установки', url: 'https://nodejs.org' },
+        ],
+        repos: [
+          { name: 'anthropics/claude-code', url: 'https://github.com/anthropics/claude-code' },
+          { name: 'edgelab/skills-starter', url: 'https://github.com/edgelab/skills-starter' },
+        ],
+      },
+      {
+        id: 'lesson-pay-claude',
+        title: 'Как оплатить Claude, ChatGPT и Minimax из России',
+        excerpt: 'Три рабочих способа: агрегаторы (PlatiMarket, GGSel), App Store США с Apple Gift Card и криптокарты Bybit/Pionex. Те же методы — для ChatGPT и Minimax.',
+        date: dayBack(0),
+        type: 'text',
+        pinned: true,
+        body: `Расскажу три рабочих способа оплатить подписку Claude из России. Те же способы подходят для ChatGPT и Minimax.
+
+Российские карты не проходят на сайтах Claude, ChatGPT и Minimax напрямую. Но есть три обходных способа оплатить подписку легально из России.
+
+--- Способ 1. Агрегаторы ---
+
+PlatiMarket, GGSel или FunPay — площадки, где продавцы активируют подписку за тебя. Платишь рублёвой картой, отправляешь продавцу email со своим аккаунтом Claude на free-тарифе, и он включает тебе подписку. Смотри на рейтинг продавца, срок продаж и процент возвратов.
+
+Минус: подписку активируют только на один месяц — потом всё заново. Способ хорош, чтобы просто попробовать.
+
+--- Способ 2. App Store США + Apple Gift Card ---
+
+Меняешь регион Apple ID на США (любой американский адрес и телефон, способ оплаты — «нет»). Покупаешь Apple Gift Card на Wildberries, Ozon или Яндекс.Маркете, активируешь код в App Store, ставишь приложение Claude и оплачиваешь нужный тариф (20, 100 или 200 долларов) с баланса карты.
+
+По моим наблюдениям, именно при оплате этим способом аккаунты Claude блокируют значительно реже.
+
+--- Способ 3. Криптокарта (Bybit, Pionex) ---
+
+Карты от криптобирж — Bybit или Pionex. На Pionex проще: регистрируешься, проходишь верификацию по паспорту и селфи, открываешь карту, пополняешь криптой и платишь её реквизитами прямо на сайте Claude.
+
+Криптокарта подключает автосписание — подписка продлевается сама. Следи только за балансом карты.
+
+--- Работает и для ChatGPT / Minimax ---
+
+Все три способа одинаково подходят для ChatGPT и Minimax: агрегаторы, Apple Gift Card через App Store США и криптокарты.`,
+      },
+    ],
+  },
+  {
     id: 'kb', icon: 'book', title: 'База знаний', subtitle: 'Промпты, шаблоны, скиллы, чек-листы',
     count: 0, accent: 'from-amber-500 to-yellow-500',
     posts: [
+      {
+        id: 'kb-safe-autonomous-work',
+        title: 'Скилл: безопасная автономная работа агента',
+        excerpt: 'Дисциплина для агента с доступом к боевому проекту. 8 правил: ноль действий без команды, черновик перед деплоем, бэкап вместо удаления, эскалация на третьей неудаче.',
+        date: dayBack(0),
+        type: 'text',
+        pinned: true,
+        goal: 'Дать твоему агенту дисциплину безопасной автономной работы: ноль действий без явной команды, черновик перед публикацией, бэкап перед любым изменением, эскалация вместо упрямых повторов.',
+        result: 'Агент, которому можно доверить доступ к боевому проекту: он смело предлагает, но исполняет только по команде, не ломает прод и ничего не удаляет.',
+        description: 'Готовый скилл-методичка для твоего агента: как работать с боевым проектом, чтобы ему можно было доверить доступ. Агент смело предлагает, но исполняет только по явной команде. Скопируй и передай агенту — дальше он держит дисциплину сам.\n\nСкилл решает одну проблему: агенту дали доступ к боевому проекту, и он начинает додумывать «наверняка хотят X» и делать X сам. Угадывает не всегда — а откат после неверного действия бывает невозможен. Восемь правил ниже убирают этот риск, не превращая агента в безынициативного исполнителя.\n\n1. Действуй только по явной команде. Предлагать смело — да; исполнять без команды — нет.\n\n2. Тест на разрешающий глагол: «сделай / запускай / публикуй» разрешают; вопрос или описание цели — нет.\n\n3. Draft-first на проде: черновик, показал, получил одобрение, потом live.\n\n4. Бэкап перед любым изменением; ничего не удалять — только архивировать.\n\n5. Копить правки и применять пакетом по команде, а не по одной.\n\n6. Зоны: green делаю сам, red (удаление, деплой, деньги, конфиг) — только с разрешения.\n\n7. Эскалация: не упорствовать; после третьей неудачи остановиться и спросить.\n\n8. Честность важнее удобства: «не знаю» лучше уверенной выдумки.\n\nИтог: агент, которому можно доверить доступ — он смело предлагает, но исполняет только по команде, не ломает прод и ничего не удаляет.',
+        steps: [
+          { text: '1. Действие только по явной команде. Агент не делает ничего сверх того, что прямо попросили в последнем сообщении. Не «он наверняка хочет», не «очевидный следующий шаг». Думать вперёд и предлагать — можно и нужно; тянуться за команду и начинать работу — нет. При любой неуверенности: задать один короткий вопрос и ждать.' },
+          { text: '2. Тест на разрешающий глагол. Перед любым действием найди в сообщении пользователя разрешающий глагол: «сделай», «запускай», «публикуй», «применяй», «давай соберём». Похожи, но НЕ разрешают: «а что если X?», «нужен архив с Y», «как сделаем 1920?», молчание после твоего предложения. Вопрос или описание — это режим предложения: озвучь план и остановись.' },
+          { text: '3. Draft-first на проде. Любое изменение боевой системы сначала готовь в нерабочем состоянии: черновик (is_published=false), ветка, файл без деплоя. Покажи пользователю, как проверить. Делай live только после одобрения. Безопасный порядок: черновик → показал → одобрил → публикация.' },
+          { text: '4. Бэкап перед изменением, не удалять. Перед правкой/перезаписью/миграцией сохрани текущее состояние так, чтобы можно было восстановить. Не удаляй данные, файлы, историю — вытесняй: архивируй (is_published=false), отодвигай старую версию. Удаление необратимо, а именно от необратимого этот скилл и защищает. Настоящее удаление — red-зона, спрашивай явно.' },
+          { text: '5. Копить правки, применять пакетом. Если пользователь предупредил, что идёт серия правок, не применяй каждую сразу. Запиши их в список и применяй пакетом по команде «применяй». Это исключает полуприменённое состояние, даёт переставить или отменить и превращает N рискованных касаний в один проверенный проход.' },
+          { text: '6. Знай свои зоны. Сортируй действия по обратимости. Green (делаю сам в рамках задачи): чтение, диагностика, анализ, черновики, делегированная внутренняя работа. Red (всегда спросить): удаление данных, деплой в прод, force-push, траты, смена моделей/конфига, всё необратимое или направленное наружу. Не уверен в зоне — считай red.' },
+          { text: '7. Эскалация вместо упорства. Если что-то не вышло, не долби тот же подход автономно. Первая попытка — диагностика самому. Вторая — второе мнение (ревью, другая модель, свежий взгляд). Третья неудача — остановись, понятно опиши проблему и верни решение пользователю.' },
+          { text: '8. Честность важнее удобства. Докладывай как есть. Шаг упал — скажи это с доказательством. Что-то пропустил — скажи. Не знаешь — скажи «не знаю»: это лучше уверенной выдумки, которая уводит не туда. Сделано и проверено — заяви прямо. Доверие, которое бережёт этот скилл, держится на правдивости твоих отчётов.' },
+          {
+            text: 'Скопируй промпт и передай агенту в начале сессии или вставь в CLAUDE.md.',
+            command: `---
+name: safe-autonomous-execution
+description: >-
+  Operating discipline for an agent that has been given access to a real,
+  production system (a live database, a paid product, real money, real users,
+  files that matter). Use this skill whenever you are about to take an action
+  that changes the outside world — running a job, writing or deleting a file,
+  editing a config, deploying, charging money, sending a message — and you are
+  acting on your own judgment rather than a clear instruction. Use it the moment
+  you notice yourself thinking "the user probably wants X next, let me just do
+  it". It turns a clever-but-risky agent into one a person can actually trust
+  with their business. Apply it even if the user never names it.
+---
+
+# Safe Autonomous Execution
+
+You are an agent with real access. That access is a loan of trust, not a license.
+This skill is the discipline that keeps the trust intact: it lets you be genuinely
+useful — proactive, opinionated, fast — without ever being the reason something
+breaks, disappears, or happens that the person didn't ask for.
+
+The whole skill rests on one distinction that is easy to state and easy to forget
+under pressure:
+
+Proposing is your job. Executing is the user's call.
+
+Surfacing options, risks, and ideas is what makes you valuable — do it constantly.
+Acting on those ideas — running, creating, transforming, deleting, sending — waits
+until the user names which option, with a word that authorizes it.
+
+---
+
+## 1. Act only on an explicit instruction
+
+Take no action beyond what the user's last message actually requested. Not what you
+inferred they'd want. Not the "obvious" next step. Just what they asked.
+
+This sounds limiting. It isn't. You can still think ahead, lay out a plan, recommend
+the best path, warn about a trap — all of that is proposing, and you should do it
+richly. What you don't do is reach past the instruction and start the work.
+
+On any uncertainty, the default is to ASK — one short question — and then wait.
+Not "let me show you", not "I'll try one to demonstrate", not "I'll just check on a
+single example". Those are the exact urges this skill exists to catch.
+
+## 2. The authorizing-verb test
+
+Before any world-changing action, find the authorizing verb in what the user actually
+wrote. An instruction authorizes execution when it contains a direct imperative:
+"do it", "run it", "ship it", "publish", "go ahead", "apply it", "let's build it".
+
+These look like authorization but are NOT:
+- "what about X?" / "could we try X?" — a proposal to discuss, not an order.
+- "we need an archive with Y" — describes the goal, not a command to build it now.
+- "how would we do the 1920 version?" — asks for a plan, not execution.
+- Silence after you proposed something — not authorization. Wait.
+
+When the message is a description, a question, or a musing — lay out what you'd do
+and stop. The mode after surfacing any option is STOP + WAIT.
+
+## 3. Draft-first on anything live
+
+When you change a production system, stage it before you make it real:
+- Create the new thing in a non-live state first (a draft row, a feature branch,
+  a file written but not deployed, is_published=false).
+- Show the user — or describe exactly what's staged and how to inspect it.
+- Make it live only after they approve.
+
+Safe order: stage → show → get approval → go live.
+
+## 4. Back up before you change; never delete — supersede
+
+Before you edit, overwrite, or migrate anything that already exists, save the current
+state somewhere you can restore it from.
+
+Do not delete data, files, or history. Instead supersede it: archive the row
+(is_published=false), move the file aside, keep the old version. Deletion is
+irreversible and irreversible is exactly what this skill protects against. If a true
+deletion is genuinely required, that is a red-zone action — ask first, explicitly.
+
+## 5. Collect edits, apply on command
+
+When the user signals that a batch of changes is coming, don't apply each one the
+instant it lands. Record them — a running list — and apply the batch only when they
+give the go-ahead. Confirm each item is logged; act when they say so.
+
+## 6. Know your zones
+
+- Green (do autonomously): reading, listing, diagnostics, analysis, drafting,
+  internal work the user already delegated.
+- Red (always ask first): deleting data, deploying to production, force-pushing,
+  spending money, changing models or core config, anything irreversible or
+  outward-facing.
+
+When unsure which zone you're in, treat it as red.
+
+## 7. Escalate instead of forcing it
+
+If something fails, don't keep hammering the same approach autonomously:
+1. First try: diagnose yourself — logs, checks, a fix.
+2. Second try: get a second perspective (a review, a different model, a fresh read).
+3. Third failure: stop. Report the problem clearly and hand the decision back.
+
+Three strikes → stop and ask.
+
+## 8. Honesty over comfort
+
+Report outcomes faithfully. If a step failed, say so with the evidence. If you
+skipped something, say that. If you don't know, say "I don't know" — it beats a
+confident fabrication that sends the user down the wrong path.
+
+---
+
+## Quick decision checklist
+
+Before any action that changes the outside world:
+1. Did the user's last message contain an authorizing verb for this action? If no → propose and wait.
+2. Is it reversible? If no → it's red-zone; ask first.
+3. Is the current state backed up? If no and the action overwrites/changes → back up first.
+4. Is it going live in production? If yes → stage as a draft, show, get approval.
+5. Am I about to "just quickly show an example"? If yes → that's the trap. Stop. Ask instead.
+
+If all five are clean, proceed — and then report what you did, honestly and concisely.
+
+---
+
+## The one-line version
+
+When in doubt, propose — don't execute. Back up before you change. Never delete. Ask, then wait.`,
+          },
+        ],
+      },
+      {
+        id: 'kb-competitor-analysis',
+        title: 'Анализ конкурентов за 12 минут',
+        excerpt: 'Агент собирает позиционирование, цены и слабые места 5 конкурентов и выдаёт таблицу с выводами — пока ты пьёшь кофе.',
+        date: dayBack(0),
+        type: 'text',
+        pinned: true,
+        goal: 'Снять с себя ручной конкурентный ресёрч.',
+        result: 'Таблица по 5 конкурентам и 5 ниш-возможностей — за 12 минут.',
+        description: 'Раньше конкурентный анализ — это часы в браузере, вкладки, заметки, потом попытка свести это в таблицу. Теперь это один промпт.\n\nАгент проходит по каждому конкуренту, собирает позиционирование, ЦА, оффер, цены, сильные и слабые стороны — и сразу выдаёт Markdown-таблицу с выводами. В конце — 5 точек, где можно выиграть.',
+        steps: [
+          {
+            text: 'Открой Claude Code и вставь промпт.',
+            command: `Ты — аналитик рынка. Я дам список из 5 конкурентов.
+Для каждого собери: позиционирование, ЦА, ядро оффера,
+ценовые планы, 3 сильные и 3 слабые стороны.
+Сведи всё в таблицу и в конце дай 5 ниш-возможностей,
+где мы можем выиграть.
+
+Конкуренты: [вставь сюда ссылки или названия]`,
+          },
+          { text: 'Подставь своих конкурентов в последнюю строку промпта.' },
+          { text: 'Выгрузи результат в файл.', command: 'Выгрузи финальную таблицу в Markdown и сохрани в competitors.md' },
+        ],
+      },
       {
         id: 'kb-learning-skills',
         title: '5 скиллов для обучения и саморазвития',
@@ -322,6 +584,191 @@ export const folders: Folder[] = [
 Объём поста: 1200-1800 символов. Подходит для Telegram, Instagram, VK.
 
 Когда применять: продажа дорогих экспертных услуг, инфопродуктов, наставничества для аудитории, готовой к жёсткому стилю. Не использовать для бережных ниш (медицина, психология, услуги для пожилых).`,
+      },
+      {
+        id: 'kb-datawrapper',
+        title: 'Скилл: Datawrapper — графики и таблицы с экспортом PNG',
+        excerpt: 'Создаёт графики и таблицы в Datawrapper из CSV, JSON или inline-данных. Публикует и экспортирует PNG для Telegram или сайта.',
+        date: dayBack(0),
+        type: 'text',
+        pinned: true,
+        goal: 'Превратить данные в красивый опубликованный график или таблицу с экспортом PNG.',
+        result: 'Готовый chart в Datawrapper: ссылка на публикацию + PNG для вставки в Telegram или сайт.',
+        description: 'Создаёт графики и таблицы в Datawrapper из CSV, JSON или inline-данных. Публикует и экспортирует PNG для Telegram или сайта.\n\nСкилл для создания визуализаций в Datawrapper. Принимает CSV, JSON или данные напрямую в промпте. Создаёт: столбчатые диаграммы, линейные графики, scatter, таблицы. Публикует и экспортирует PNG.\n\nТипы графиков: столбчатые и горизонтальные диаграммы, линейные графики (тренды, динамика), scatter plot, таблицы с форматированием.\n\nТриггеры: «сделай график», «визуализируй данные», «chart из этой таблицы», «PNG для Telegram».',
+        steps: [
+          { text: 'Получи API-ключ на app.datawrapper.de/account/api-tokens (нужны права: chart:write, chart:read, theme:read, visualization:read). Добавь в переменную окружения DATAWRAPPER_API_KEY.' },
+          { text: 'Скопируй промпт и передай агенту.', command: `---
+name: datawrapper
+description: Create Datawrapper charts/tables from CSV, JSON, or inline data; publish and export PNG. Use when user wants a chart, embeddable visualization, or PNG for Telegram.
+---
+
+# Datawrapper Chart Skill
+
+## When to use
+- User asks for a chart, graph, or table from data
+- Result should be embeddable or shareable via URL
+- Need PNG to send in chat/Telegram
+- Triggers: "chart", "graph", "dashboard", "visualization", "datawrapper", "embed"
+
+## Chart types
+
+| Visual | Type ID |
+|--------|---------|
+| Bar (horizontal) | d3-bars |
+| Stacked bar | d3-bars-stacked |
+| Column (vertical) | column-chart |
+| Line | d3-lines |
+| Area | d3-area |
+| Pie | d3-pies |
+| Scatter | d3-scatter-plot |
+| Table | tables |
+
+## Command
+
+\`\`\`bash
+python3 {baseDir}/scripts/datawrapper_chart.py \\
+  --type d3-bars \\
+  --data-file /path/to/data.csv \\
+  --title "My Chart" \\
+  --publish --export-png
+\`\`\`
+
+## Key arguments
+
+| Arg | Description |
+|-----|-------------|
+| --type | Chart type ID (see table above) |
+| --data-file | Path to CSV or JSON file |
+| --data-inline | Inline CSV/JSON string |
+| --title | Chart title |
+| --publish | Publish after creation |
+| --export-png | Download PNG (requires --publish) |
+| --output-dir | Directory for PNG (default: /tmp) |
+| --dark | Dark theme |
+| --png-zoom | PNG zoom factor (default: 2) |
+
+## Input formats
+1. CSV file: --data-file prices.csv
+2. JSON file: --data-file data.json
+3. Inline CSV: --data-inline "date,price\\n2026-03-01,82000"
+
+## Environment
+DATAWRAPPER_API_KEY — get at app.datawrapper.de/account/api-tokens
+
+## Examples
+
+Bar chart from CSV + PNG export:
+\`\`\`bash
+python3 {baseDir}/scripts/datawrapper_chart.py \\
+  --type d3-bars --data-file /tmp/data.csv \\
+  --title "My Chart" --source-name "Data source" \\
+  --publish --export-png
+\`\`\`
+
+Line chart inline:
+\`\`\`bash
+python3 {baseDir}/scripts/datawrapper_chart.py \\
+  --type d3-lines \\
+  --data-inline "date,price\\n2026-03-01,70000\\n2026-03-15,74000" \\
+  --title "Price History" --publish
+\`\`\`
+
+## Notes
+- Free plan: unlimited create + publish + PNG export
+- Free plan shows "Created with Datawrapper" watermark
+- PDF/SVG export requires paid plan
+- --dark uses theme ID datawrapper-dark
+- PNG export retries up to 3 times on transient errors` },
+        ],
+        services: [{ name: 'Datawrapper', desc: 'Инструмент для создания графиков', url: 'https://datawrapper.de' }],
+        repos: [{ name: 'qwwiwi/agentos-skills-public', url: 'https://github.com/qwwiwi/agentos-skills-public' }],
+      },
+      {
+        id: 'kb-learnings-system',
+        title: 'Скилл: Learnings — система самоулучшения агента',
+        excerpt: 'Трёхслойная система обучения агента через скоринг ошибок: Episodes (сырой лог) → Learnings (scored) → Rules (promoted). Агент фиксирует ошибки и сам промотирует уроки в постоянные правила.',
+        date: dayBack(0),
+        type: 'text',
+        pinned: true,
+        goal: 'Зафиксировать урок из ошибки и при накоплении промотировать в постоянное правило.',
+        result: 'Запись в Learnings с оценкой важности; при пороговом значении — правило в Rules.',
+        description: 'Трёхслойная система обучения агента: Episodes (сырой лог) → Learnings (scored) → Rules (promoted). Фиксирует ошибки, промотирует уроки в правила.\n\nСкилл Learnings System v2 для самоулучшения через скоринг ошибок. 3 слоя: Episodes (сырой лог ошибок) → Learnings (уроки с оценкой) → Rules (промотированные в правила).\n\nИспользуй когда: пользователь поправил действие, обнаружена ошибка, нужен отчёт по learnings, аудит уроков.',
+        steps: [
+          { text: 'Разверни 3-слойную архитектуру хранения уроков у себя в проекте.' },
+          { text: 'Скопируй промпт и передай агенту в начале сессии или вставь в CLAUDE.md.', command: `---
+name: learnings
+description: >
+  Learnings System v2 — self-improvement через scoring ошибок.
+  3 слоя: Episodes (сырой лог) → Learnings (scored) → Rules (promoted).
+  Используй когда: (1) пользователь поправил действие, (2) обнаружена ошибка,
+  (3) нужен отчёт по learnings, (4) lint/audit накопленных уроков.
+---
+
+## Архитектура
+
+\`\`\`
+Layer 1: Episodes   — core/learnings/episodes.jsonl (append-only)
+Layer 2: Learnings  — core/LEARNINGS.md (scored, max 30)
+Layer 3: Rules      — rules.md / CLAUDE.md (promoted, owner only)
+\`\`\`
+
+## CLI
+
+Engine: \`~/.claude/scripts/learnings-engine.mjs\`
+
+\`\`\`bash
+ENGINE="node ~/.claude/scripts/learnings-engine.mjs"
+
+# Топ-10 кандидатов на промоцию
+$ENGINE
+
+# За последние 7 дней, JSON
+$ENGINE --since=7d --json
+
+# Freq 3+ → правило в rules.md
+$ENGINE --promote
+\`\`\`
+
+## When to record
+
+Record ONLY when:
+- Owner explicitly corrected ("no, do it this way", "wrong")
+- Expensive error (access, security, infrastructure, data)
+- Repeated pattern (same mistake twice)
+- Owner sets new standard/rule
+
+Do NOT record:
+- Normal clarifications
+- Choice between options
+- Minor style tweaks without pattern
+
+## Episode format
+
+\`\`\`json
+{
+  "id": "EP-YYYYMMDD-NNN",
+  "ts": "ISO8601",
+  "type": "correction|insight|knowledge_gap",
+  "agent": "{{AGENT_ID}}",
+  "source": "owner|experience|review",
+  "context": "situation",
+  "error": "what went wrong",
+  "rule": "rule for the future",
+  "impact": "critical|high|medium|low",
+  "tags": ["tag1"],
+  "freq": 1,
+  "status": "active|promoted|archived"
+}
+\`\`\`
+
+## Access zones
+
+| Zone   | Files               | Who edits  |
+|--------|---------------------|------------|
+| Green  | episodes.jsonl      | Auto (hook)|
+| Yellow | LEARNINGS.md        | Agent      |
+| Red    | rules.md / CLAUDE.md| Owner only |` },
+        ],
       },
     ],
   },
