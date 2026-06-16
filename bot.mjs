@@ -2,12 +2,27 @@
 // При сабмите формы внутри миниаппы — анкета прилетает в личку OWNER_ID (если задан) или отправителю.
 import fs from 'node:fs'
 import path from 'node:path'
+import { Database } from 'bun:sqlite'
 
 const TOKEN = process.env.BOT_TOKEN
 const URL = process.env.MINIAPP_URL
 const OWNER_ID = process.env.OWNER_ID ? Number(process.env.OWNER_ID) : null
 const SKILL_PATH = path.resolve('./public/files/web-design-pro.skill')
 const API = `https://api.telegram.org/bot${TOKEN}`
+
+// Обезличенный лог анкет: только tg_id + время, без имени/города/профессии.
+// Решение от 2026-06-16: не поднимать Supabase/Postgres под одну колонку --
+// собственный сервер (3.7GB RAM, диск в обрез) под полный self-host Supabase
+// не годится, а 152-ФЗ снимается полностью если не хранить ПД привязанные к человеку.
+fs.mkdirSync(path.resolve('./data'), { recursive: true })
+const db = new Database(path.resolve('./data/leads.db'))
+db.run(`CREATE TABLE IF NOT EXISTS leads (
+  tg_id INTEGER NOT NULL,
+  submitted_at TEXT NOT NULL
+)`)
+function logLead(tgId) {
+  db.run('INSERT INTO leads (tg_id, submitted_at) VALUES (?, ?)', [tgId, new Date().toISOString()])
+}
 
 const ANKETA_URL = URL.endsWith('/') ? `${URL}?form=intro` : `${URL}/?form=intro`
 
@@ -92,6 +107,8 @@ while (true) {
           console.log('unknown web_app_data type:', payload.type)
           continue
         }
+
+        logLead(from.id || chat_id)
 
         const card = formatAnketa(payload, from)
         const targetId = OWNER_ID || chat_id

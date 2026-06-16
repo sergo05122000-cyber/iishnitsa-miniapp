@@ -7,3 +7,5 @@ shot-*.mjs
 shoot.mjs
 bot.pid
 .vercel
+.env
+data/
