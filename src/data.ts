@@ -153,7 +153,7 @@ export const folders: Folder[] = [
         pinned: true,
         goal: 'Показать как собрать лендинг со скролл-управляемой анимацией кадров в стиле Apple/AirPods без дизайнера и видеографа.',
         result: 'Рабочий пайплайн: копирайтинг через Claude, генерация кадров через Higgsfield, сборка в canvas с плавным скроллом, готовый к деплою сайт.',
-        description: 'Скролл-анимация в стиле Apple (AirPods, MacBook) - это не видео и не CSS, а последовательность статичных кадров на canvas, которая переключается синхронно со скроллом страницы. Такой формат удерживает внимание в 3-5 раз дольше обычного лендинга, не лагает на iPhone и подходит для премиум-продуктов, инфокурсов и экспертных лендингов.\n\nПайплайн целиком - 7 шагов: копирайтинг на 10 глав через Claude, визуальная карта (какой кадр под какую главу), генерация кадров через Higgsfield с одним style seed для консистентности, сборка кадров в 30-секундное видео, нарезка видео обратно в 200-240 WebP кадров, реализация на canvas с привязкой к scroll-progress, деплой с CDN и проверкой Lighthouse. Каждый шаг опирается на готовый промпт или команду ffmpeg.\n\nКлючевые правила, без которых анимация будет дёргаться:\n\n1. Canvas, не video - у видео декодер тормозит на скрабе, особенно в Safari на iPhone, канвас рисует кадр через GPU за доли миллисекунды.\n\n2. WebP, не JPG - на 25-35% легче при том же качестве, 200+ кадров иначе весят неприлично много.\n\n3. Разделять scroll-listener и рендер - слушатель скролла только считает номер кадра, рисование идёт в отдельном requestAnimationFrame, иначе скролл лагает на трекпаде.\n\n4. Отдельный лёгкий набор кадров для мобилок (960px, 4fps) - десктопный набор на телефоне убивает 4G.\n\n5. prefers-reduced-motion - обязательный fallback в статичную версию, часть людей укачивает от такой анимации.\n\nЗвучит как продакшен с дизайнером и видеографом, на деле - 5-7 часов от пустого проекта до боевого сайта, если идти по готовым промптам и командам ffmpeg ниже. Источник методики - Алекс Манье, Revelux AI.',
+        description: 'Скролл-анимация в стиле Apple (AirPods, MacBook) - это не видео и не CSS, а последовательность статичных кадров на canvas, которая переключается синхронно со скроллом страницы. Такой формат удерживает внимание в 3-5 раз дольше обычного лендинга, не лагает на iPhone и подходит для премиум-продуктов, инфокурсов и экспертных лендингов.\n\nПайплайн целиком - 7 шагов: копирайтинг на 10 глав через Claude, визуальная карта (какой кадр под какую главу), генерация кадров через Higgsfield с одним style seed для консистентности, сборка кадров в 30-секундное видео, нарезка видео обратно в 200-240 WebP кадров, реализация на canvas с привязкой к scroll-progress, деплой с CDN и проверкой Lighthouse. Каждый шаг опирается на готовый промпт или команду ffmpeg.\n\nКлючевые правила, без которых анимация будет дёргаться:\n\n1. Canvas, не video - у видео декодер тормозит на скрабе, особенно в Safari на iPhone, канвас рисует кадр через GPU за доли миллисекунды.\n\n2. WebP, не JPG - на 25-35% легче при том же качестве, 200+ кадров иначе весят неприлично много.\n\n3. Разделять scroll-listener и рендер - слушатель скролла только считает номер кадра, рисование идёт в отдельном requestAnimationFrame, иначе скролл лагает на трекпаде.\n\n4. Отдельный лёгкий набор кадров для мобилок (960px, 4fps) - десктопный набор на телефоне убивает 4G.\n\n5. prefers-reduced-motion - обязательный fallback в статичную версию, часть людей укачивает от такой анимации.\n\nЗвучит как продакшен с дизайнером и видеографом, на деле - 5-7 часов от пустого проекта до боевого сайта, если идти по готовым промптам и командам ffmpeg ниже.\n\nЧек-лист перед запуском: кадры в WebP, batched preload по 20, видимый прогресс-бар загрузки, scroll-listener с passive true, отдельный requestAnimationFrame, проверка currentFrame не равен drawnFrame, canvas-размер с учётом devicePixelRatio, cover-fit под разные экраны, отдельный набор кадров для мобилок, рабочий prefers-reduced-motion, главы на правильных % скролла с зазором 1-2% между ними, включённый CDN, Lighthouse Performance 80+, проверка на iPhone Safari и на медленном 4G.\n\nИсточник методики - Алекс Манье, Revelux AI.',
         steps: [
           { text: '1. Сгенерируй копирайтинг на 10 глав. Дай Claude (Opus) контекст продукта - что это, аудитория, цена, чем отличается, доказательства - и попроси структуру из 10 глав: hero, проблема, слом старого подхода, решение, механика, доказательство, кому подходит, что внутри, гарантия, цена и CTA. Каждая глава это свой эмоциональный шаг и свой отрезок скролла в процентах.' },
           { text: '2. Добавь визуальную карту. Для каждой главы из шага 1 опиши тип кадра (wide-shot, product-shot, lifestyle, schema, portrait), настроение и один общий style seed для всех кадров сразу - без него 10 кадров получатся в разных стилях и не будут читаться как один сайт.' },
@@ -181,6 +181,138 @@ export const folders: Folder[] = [
 - Цена без скидок типа "было/стало", только финальная
 
 Сначала покажи план в 5 строк (без JSON), жди подтверждения, потом JSON.` },
+          { text: 'Промпт для второго шага (визуальная карта) - передай его Claude вместе с JSON-копирайтингом из первого промпта.', command: `Возьми этот копирайтинг и для каждой главы добавь поле "visual":
+
+{
+  "visual": {
+    "type": "wide-shot | product-shot | lifestyle | split-screen | schema | portrait",
+    "description": "...",
+    "mood": "...",
+    "color_palette": "...",
+    "composition": "wide | medium | close-up",
+    "midjourney_style_seed": "..." // одинаков для ВСЕХ глав
+  }
+}
+
+Style_seed одинаков для всех 10 глав - это создаёт единую вселенную.
+Главы 01 и 10 должны рифмоваться (open loop -> close loop).
+Никаких клише типа "улыбающийся человек с ноутбуком".` },
+          { text: 'Промпт для генерации одного кадра через Higgsfield MCP в Claude Code - повторяй для каждой главы.', command: `Сгенерируй через mcp__claude_ai_higgsfield__generate_image:
+
+Description: [из visual.description]
+Style: [из midjourney_style_seed]
+Reference: [путь к референс-кадру если уже есть]
+Size: 1920x1080 (landscape 16:9)
+
+Save to: ./raw-frames/[NN-name].webp` },
+          { text: 'Промпт для motion-интерполяции между двумя соседними кадрами - даёт живой переход без видимых стыков.', command: `Через mcp__claude_ai_higgsfield__generate_video создай 3-секундное видео.
+
+Start frame: raw-frames/0X-...webp
+End frame:   raw-frames/0Y-...webp
+Motion: [slow camera dolly forward / pan left / zoom in / rotate]
+Duration: 3 seconds
+
+Save to: raw-videos/0X-to-0Y.mp4` },
+          { text: 'Команды ffmpeg для склейки видео-сегментов и нарезки финального видео на кадры (desktop 1600px/8fps, mobile 960px/4fps).', command: `# Склейка сегментов (list.txt: file '01-to-02.mp4' ...)
+ffmpeg -f concat -safe 0 -i list.txt -c copy final.mp4
+
+# Нарезка для десктопа
+mkdir -p public/frames
+ffmpeg -i final.mp4 -vf "fps=8,scale=1600:-2" -quality 80 public/frames/frame_%04d.webp
+
+# Нарезка для мобилок
+mkdir -p public/frames-mobile
+ffmpeg -i final.mp4 -vf "fps=4,scale=960:-2" -quality 70 public/frames-mobile/frame_%04d.webp` },
+          { text: 'Готовый рабочий JS-стартер: preload, scroll-progress, canvas-рендер, главы, fallback на reduced-motion. Вставь после HTML с #scrolltrack/#stage/#seq/.chapter из описания и положи кадры в /public/frames/.', command: `const TOTAL = window.innerWidth < 768 ? 120 : 240;
+const FRAMES_PATH = window.innerWidth < 768 ? '/frames-mobile' : '/frames';
+const frames = new Array(TOTAL);
+const canvas = document.getElementById('seq');
+const ctx = canvas.getContext('2d');
+
+let currentFrame = 0;
+let drawnFrame = -1;
+
+function resize() {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  canvas.width = innerWidth * dpr;
+  canvas.height = innerHeight * dpr;
+  canvas.style.width = innerWidth + 'px';
+  canvas.style.height = innerHeight + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  drawnFrame = -1;
+}
+addEventListener('resize', resize);
+resize();
+
+function loadFrame(i) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.src = \`\${FRAMES_PATH}/frame_\${String(i + 1).padStart(4, '0')}.webp\`;
+    img.onload = () => { frames[i] = img; resolve(); };
+    img.onerror = reject;
+  });
+}
+
+async function preload(onProgress) {
+  const BATCH = 20;
+  for (let i = 0; i < TOTAL; i += BATCH) {
+    const batch = [];
+    for (let j = i; j < Math.min(i + BATCH, TOTAL); j++) batch.push(loadFrame(j));
+    await Promise.all(batch);
+    onProgress(Math.min(i + BATCH, TOTAL) / TOTAL);
+  }
+}
+
+function drawCover(img) {
+  const cw = canvas.clientWidth, ch = canvas.clientHeight;
+  const ir = img.naturalWidth / img.naturalHeight, cr = cw / ch;
+  let w, h, x, y;
+  if (ir > cr) { h = ch; w = ch * ir; } else { w = cw; h = cw / ir; }
+  x = (cw - w) / 2; y = (ch - h) / 2;
+  ctx.clearRect(0, 0, cw, ch);
+  ctx.drawImage(img, x, y, w, h);
+}
+
+const chapters = Array.from(document.querySelectorAll('.chapter')).map(el => ({
+  el,
+  start: parseFloat(el.dataset.start),
+  end: parseFloat(el.dataset.end),
+}));
+
+function getProgress() {
+  const t = document.getElementById('scrolltrack');
+  const r = t.getBoundingClientRect();
+  return Math.max(0, Math.min(1, -r.top / (r.height - innerHeight)));
+}
+
+addEventListener('scroll', () => {
+  const p = getProgress();
+  currentFrame = Math.min(Math.floor(p * TOTAL), TOTAL - 1);
+  for (const ch of chapters) {
+    ch.el.classList.toggle('visible', p >= ch.start && p <= ch.end);
+  }
+}, { passive: true });
+
+function tick() {
+  if (currentFrame !== drawnFrame && frames[currentFrame]) {
+    drawCover(frames[currentFrame]);
+    drawnFrame = currentFrame;
+  }
+  requestAnimationFrame(tick);
+}
+
+const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+if (reducedMotion) {
+  document.body.classList.add('reduced-motion');
+} else {
+  preload(p => {
+    document.querySelector('#progressbar').style.width = \`\${p * 100}%\`;
+  }).then(() => {
+    document.getElementById('loader').remove();
+    tick();
+  });
+}` },
         ],
         services: [
           { name: 'Higgsfield', desc: 'генерация кадров с единым стилем через Reference Elements, 20-40 долларов в месяц' },
