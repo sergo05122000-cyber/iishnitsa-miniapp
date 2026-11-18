@@ -605,7 +605,7 @@ function PostView({ folderId, postId, onBack, onOpenPost }: { folderId: string; 
                 Следующий урок: {nextLesson.title}
               </button>
             ) : (
-              <p className="card p-4 text-[14px] leading-snug" style={{ color: 'var(--tg-text)' }}>Следующий урок скоро появится.</p>
+              <p className="card p-4 text-[14px] leading-snug" style={{ color: 'var(--tg-text)' }}>Курс пройден. Твой агент готов к работе.</p>
             )}
           </div>
         )}
