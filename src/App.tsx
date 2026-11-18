@@ -775,7 +775,6 @@ export function App() {
       const dark = tg?.colorScheme ? tg.colorScheme === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches
       document.documentElement.classList.toggle('tg-dark', dark)
       const bg = dark ? '#111111' : '#FAFAF8'
-      document.body.style.background = bg
       try { tg?.setHeaderColor?.(bg); tg?.setBackgroundColor?.(bg) } catch {}
     }
     applyTheme()
