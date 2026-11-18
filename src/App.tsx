@@ -72,7 +72,7 @@ function HomeHero({ totalPosts }: { totalPosts: number }) {
       <div className="flex items-center gap-3">
         <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true">
           <circle cx="17" cy="17" r="16" fill="var(--tg-sec)" stroke="var(--tg-border-strong)" />
-          <circle cx="17" cy="17" r="7" fill="#F0B43C" />
+          <circle cx="17" cy="17" r="7" fill="var(--tg-fill)" />
         </svg>
         <h1 className="font-display text-[30px] leading-none">{channelName}</h1>
       </div>
@@ -104,8 +104,8 @@ function FolderCard({ f, index, onOpen }: { f: Folder; index: number; onOpen: ()
       </span>
 
       {/* Icon block */}
-      <div className={`card-icon w-11 h-11 rounded-xl border flex items-center justify-center ${locked ? '' : `bg-gradient-to-br ${f.accent}`}`}
-        style={locked ? { borderColor: 'var(--tg-border)', color: 'var(--tg-locked-text)' } : { borderColor: 'transparent', color: '#FFFFFF' }}>
+      <div className="card-icon w-9 h-9 flex items-center justify-start"
+        style={{ color: locked ? 'var(--tg-locked-text)' : 'var(--tg-text)' }}>
         <FolderIcon name={f.icon} className="w-[20px] h-[20px]" stroke={1.5} />
       </div>
 
@@ -257,8 +257,8 @@ function FolderRow({ f, index, onOpen }: { f: Folder; index: number; onOpen: () 
       style={{ animationDelay: `${index * 50}ms` }}
       className={`fade-up card w-full text-left p-3.5 flex items-center gap-3 active:scale-[0.98] transition-all ${locked ? 'opacity-50' : ''}`}
     >
-      <div className={`shrink-0 w-11 h-11 rounded-xl border flex items-center justify-center ${locked ? '' : `bg-gradient-to-br ${f.accent}`}`}
-        style={locked ? { borderColor: 'var(--tg-border)', color: 'var(--tg-locked-text)' } : { borderColor: 'transparent', color: '#FFFFFF' }}>
+      <div className="shrink-0 w-9 h-9 flex items-center justify-center"
+        style={{ color: locked ? 'var(--tg-locked-text)' : 'var(--tg-text)' }}>
         <FolderIcon name={f.icon} className="w-[18px] h-[18px]" stroke={1.5} />
       </div>
       <div className="flex-1 min-w-0">
@@ -595,13 +595,13 @@ function PostView({ folderId, postId, onBack, onOpenPost }: { folderId: string; 
         {f.course && (
           <div className="mt-8">
             <div className="h-1.5 rounded-full overflow-hidden mb-2" style={{ background: 'var(--tg-border)' }}>
-              <div className="h-full rounded-full" style={{ width: `${((lessonIndex + 1) / COURSE_TOTAL) * 100}%`, background: 'var(--tg-accent)' }} />
+              <div className="h-full rounded-full" style={{ width: `${((lessonIndex + 1) / COURSE_TOTAL) * 100}%`, background: 'var(--tg-fill)' }} />
             </div>
             <p className="text-[12px] text-tg-hint mb-4">Урок {lessonIndex + 1} из {COURSE_TOTAL}</p>
             {nextLesson ? (
               <button onClick={() => onOpenPost(nextLesson.id)}
                 className="w-full py-3.5 px-4 rounded-lg font-display font-bold text-[14px] active:scale-[0.98] transition"
-                style={{ background: 'var(--tg-accent)', color: 'var(--tg-on-accent)' }}>
+                style={{ background: 'var(--tg-fill)', color: '#111111' }}>
                 Следующий урок: {nextLesson.title}
               </button>
             ) : (
@@ -766,7 +766,7 @@ export function App() {
     const applyTheme = () => {
       const dark = tg?.colorScheme ? tg.colorScheme === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches
       document.documentElement.classList.toggle('tg-dark', dark)
-      const bg = dark ? '#0D1117' : '#FAFAF8'
+      const bg = dark ? '#0F0F10' : '#FAFAF8'
       try { tg?.setHeaderColor?.(bg); tg?.setBackgroundColor?.(bg) } catch {}
     }
     applyTheme()

@@ -4,22 +4,24 @@
 
 /* Минималистичная тема: светлая и тёмная по настройке Telegram */
 :root {
-  --accent-rgb: 190, 92, 0;
-  --accent-bright-rgb: 190, 92, 0;
+  /* Один яркий цвет --tg-fill: логотип, прогресс и главная кнопка. Всё остальное нейтральное. */
+  --tg-fill: #FFC400;
+  --accent-rgb: 23, 23, 23;
+  --accent-bright-rgb: 23, 23, 23;
   --tg-bg: #FAFAF8;
   --tg-sec: #FFFFFF;
   --tg-sec-2: #F2F2EF;
   --tg-text: #171717;
   --tg-hint: #6B6B66;
-  --tg-link: rgb(var(--accent-rgb));
+  --tg-link: var(--tg-text);
   --tg-btn: #171717;
   --tg-on-accent: #FFFFFF;
   --tg-border: rgba(23, 23, 23, 0.09);
   --tg-border-strong: rgba(23, 23, 23, 0.16);
   --tg-card-shadow: none;
-  --tg-accent: rgb(var(--accent-rgb));
-  --tg-accent-bright: rgb(var(--accent-rgb));
-  --tg-accent-soft: rgba(var(--accent-rgb), 0.10);
+  --tg-accent: var(--tg-text);
+  --tg-accent-bright: var(--tg-text);
+  --tg-accent-soft: rgba(var(--accent-rgb), 0.06);
   --tg-icon: var(--tg-text);
   --tg-glow: none;
   --tg-glow-soft: none;
@@ -27,18 +29,18 @@
   --tg-locked-text: rgba(23, 23, 23, 0.40);
 }
 .tg-dark {
-  --accent-rgb: 255, 176, 32;
-  --accent-bright-rgb: 255, 196, 77;
-  --tg-bg: #0D1117;
-  --tg-sec: #161C26;
-  --tg-sec-2: #1E2632;
-  --tg-text: #F2F4F8;
-  --tg-hint: #A3AEBF;
-  --tg-btn: #FFB020;
-  --tg-on-accent: #14100A;
-  --tg-border: rgba(163, 174, 191, 0.14);
-  --tg-border-strong: rgba(163, 174, 191, 0.26);
-  --tg-locked-text: rgba(242, 244, 248, 0.40);
+  --accent-rgb: 255, 255, 255;
+  --accent-bright-rgb: 255, 255, 255;
+  --tg-bg: #0F0F10;
+  --tg-sec: #18181A;
+  --tg-sec-2: #222225;
+  --tg-text: #F5F5F4;
+  --tg-hint: #9B9BA1;
+  --tg-btn: #F5F5F4;
+  --tg-on-accent: #111111;
+  --tg-border: rgba(255, 255, 255, 0.08);
+  --tg-border-strong: rgba(255, 255, 255, 0.16);
+  --tg-locked-text: rgba(245, 245, 244, 0.40);
 }
 
 html, body, #root { height: 100%; }
