@@ -104,12 +104,8 @@ function FolderCard({ f, index, onOpen }: { f: Folder; index: number; onOpen: ()
       </span>
 
       {/* Icon block */}
-      <div className="card-icon w-11 h-11 rounded-lg border flex items-center justify-center"
-        style={{
-          borderColor: locked ? 'var(--tg-border)' : 'rgba(var(--accent-rgb),0.34)',
-          background: locked ? 'transparent' : 'rgba(var(--accent-rgb),0.07)',
-          color: locked ? 'var(--tg-locked-text)' : 'var(--tg-icon)',
-        }}>
+      <div className={`card-icon w-11 h-11 rounded-xl border flex items-center justify-center ${locked ? '' : `bg-gradient-to-br ${f.accent}`}`}
+        style={locked ? { borderColor: 'var(--tg-border)', color: 'var(--tg-locked-text)' } : { borderColor: 'transparent', color: '#FFFFFF' }}>
         <FolderIcon name={f.icon} className="w-[20px] h-[20px]" stroke={1.5} />
       </div>
 
@@ -261,12 +257,8 @@ function FolderRow({ f, index, onOpen }: { f: Folder; index: number; onOpen: () 
       style={{ animationDelay: `${index * 50}ms` }}
       className={`fade-up card w-full text-left p-3.5 flex items-center gap-3 active:scale-[0.98] transition-all ${locked ? 'opacity-50' : ''}`}
     >
-      <div className="shrink-0 w-11 h-11 rounded-lg border flex items-center justify-center"
-        style={{
-          borderColor: locked ? 'var(--tg-border)' : 'rgba(var(--accent-rgb),0.34)',
-          background: locked ? 'transparent' : 'rgba(var(--accent-rgb),0.07)',
-          color: locked ? 'var(--tg-locked-text)' : 'var(--tg-icon)',
-        }}>
+      <div className={`shrink-0 w-11 h-11 rounded-xl border flex items-center justify-center ${locked ? '' : `bg-gradient-to-br ${f.accent}`}`}
+        style={locked ? { borderColor: 'var(--tg-border)', color: 'var(--tg-locked-text)' } : { borderColor: 'transparent', color: '#FFFFFF' }}>
         <FolderIcon name={f.icon} className="w-[18px] h-[18px]" stroke={1.5} />
       </div>
       <div className="flex-1 min-w-0">
@@ -774,7 +766,7 @@ export function App() {
     const applyTheme = () => {
       const dark = tg?.colorScheme ? tg.colorScheme === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches
       document.documentElement.classList.toggle('tg-dark', dark)
-      const bg = dark ? '#111111' : '#FAFAF8'
+      const bg = dark ? '#0D1117' : '#FAFAF8'
       try { tg?.setHeaderColor?.(bg); tg?.setBackgroundColor?.(bg) } catch {}
     }
     applyTheme()

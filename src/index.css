@@ -4,8 +4,8 @@
 
 /* Минималистичная тема: светлая и тёмная по настройке Telegram */
 :root {
-  --accent-rgb: 158, 100, 0;
-  --accent-bright-rgb: 158, 100, 0;
+  --accent-rgb: 190, 92, 0;
+  --accent-bright-rgb: 190, 92, 0;
   --tg-bg: #FAFAF8;
   --tg-sec: #FFFFFF;
   --tg-sec-2: #F2F2EF;
@@ -27,18 +27,18 @@
   --tg-locked-text: rgba(23, 23, 23, 0.40);
 }
 .tg-dark {
-  --accent-rgb: 240, 180, 60;
-  --accent-bright-rgb: 240, 180, 60;
-  --tg-bg: #111111;
-  --tg-sec: #1A1A1A;
-  --tg-sec-2: #232323;
-  --tg-text: #EDEDEA;
-  --tg-hint: #9C9C96;
-  --tg-btn: #EDEDEA;
-  --tg-on-accent: #111111;
-  --tg-border: rgba(255, 255, 255, 0.09);
-  --tg-border-strong: rgba(255, 255, 255, 0.18);
-  --tg-locked-text: rgba(237, 237, 234, 0.40);
+  --accent-rgb: 255, 176, 32;
+  --accent-bright-rgb: 255, 196, 77;
+  --tg-bg: #0D1117;
+  --tg-sec: #161C26;
+  --tg-sec-2: #1E2632;
+  --tg-text: #F2F4F8;
+  --tg-hint: #A3AEBF;
+  --tg-btn: #FFB020;
+  --tg-on-accent: #14100A;
+  --tg-border: rgba(163, 174, 191, 0.14);
+  --tg-border-strong: rgba(163, 174, 191, 0.26);
+  --tg-locked-text: rgba(242, 244, 248, 0.40);
 }
 
 html, body, #root { height: 100%; }
