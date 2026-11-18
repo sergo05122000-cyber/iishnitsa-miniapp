@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { folders, channelName, channelSubtitle, tgUrlFor, TG_QUESTIONS_TOPIC, type Folder, type Post, type LessonTimecode, type LessonStep, type LessonService, type LessonRepo } from './data'
 import { IntroForm } from './IntroForm'
+import { COURSE_TOTAL } from './course'
 
 /** Open a Telegram link safely from within Telegram WebApp (or just window.open as fallback). */
 function openTelegram(url: string) {
@@ -562,8 +563,25 @@ function openTgLink(url: string) {
 
 function CopyButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false)
-  const copy = () => {
-    navigator.clipboard.writeText(text).catch(() => {})
+  const copy = async () => {
+    let ok = false
+    try {
+      await navigator.clipboard.writeText(text)
+      ok = true
+    } catch {
+      // Запасной способ для старых WebView в Telegram
+      const area = document.createElement('textarea')
+      area.value = text
+      area.setAttribute('readonly', '')
+      area.style.position = 'fixed'
+      area.style.opacity = '0'
+      document.body.appendChild(area)
+      area.select()
+      area.setSelectionRange(0, text.length)
+      try { ok = document.execCommand('copy') } catch { ok = false }
+      document.body.removeChild(area)
+    }
+    if (!ok) return
     setCopied(true)
     setTimeout(() => setCopied(false), 1800)
   }
@@ -577,6 +595,24 @@ function CopyButton({ text }: { text: string }) {
       }
       {copied ? 'Скопировано' : 'Скопировать'}
     </button>
+  )
+}
+
+function CodeBlock({ label, text, prose = false }: { label: string; text: string; prose?: boolean }) {
+  return (
+    <div className="card rounded-lg overflow-hidden">
+      <div className="flex items-center justify-between gap-2 px-3 py-2 border-b" style={{ borderColor: 'var(--tg-border)' }}>
+        <div className="flex items-center gap-1.5 min-w-0">
+          <span className="w-1.5 h-1.5 rounded-sm shrink-0" style={{ background: 'var(--tg-accent)' }} />
+          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-tg-hint truncate">{label}</span>
+        </div>
+        <CopyButton text={text} />
+      </div>
+      <pre className={`px-3 py-3 text-[12px] leading-relaxed whitespace-pre-wrap ${prose ? 'font-sans break-words' : 'font-mono break-all'}`}
+        style={{ color: prose ? 'var(--tg-text)' : 'var(--tg-accent)' }}>
+        {text}
+      </pre>
+    </div>
   )
 }
 
@@ -650,22 +686,28 @@ function LessonPostBody({ p }: { p: Post }) {
                   {i + 1}
                 </span>
                 <div className="flex-1 min-w-0 pt-0.5">
-                  <p className="text-[14px] font-medium leading-snug mb-2" style={{ color: 'var(--tg-text)' }}>{step.text}</p>
-                  {step.command && (
-                    <div className="card rounded-lg overflow-hidden">
-                      <div className="flex items-center justify-between px-3 py-2 border-b" style={{ borderColor: 'var(--tg-border)' }}>
-                        <div className="flex items-center gap-1.5">
-                          <span className="w-1.5 h-1.5 rounded-sm" style={{ background: 'var(--tg-accent)' }} />
-                          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-tg-hint">Команда</span>
-                        </div>
-                        <CopyButton text={step.command} />
-                      </div>
-                      <pre className="px-3 py-3 text-[12px] font-mono leading-relaxed whitespace-pre-wrap break-all"
-                        style={{ color: 'var(--tg-accent)' }}>
-                        {step.command}
-                      </pre>
-                    </div>
+                  {step.title && (
+                    <h3 className="font-display font-bold text-[16px] leading-snug mb-1.5" style={{ color: 'var(--tg-text)' }}>{step.title}</h3>
                   )}
+                  <p className="text-[14px] font-medium leading-snug mb-2" style={{ color: 'var(--tg-text)' }}>{step.text}</p>
+                  <div className="space-y-2">
+                    {step.command && <CodeBlock label={step.commandWin ? 'Mac' : 'Команда'} text={step.command} />}
+                    {step.commandWin && <CodeBlock label="Windows" text={step.commandWin} />}
+                    {step.prompt && <CodeBlock label="Промпт" text={step.prompt} prose />}
+                    {step.image && (
+                      <figure>
+                        <img src={step.image} alt={step.caption ?? step.title ?? ''} loading="lazy"
+                          className="w-full rounded-lg border" style={{ borderColor: 'var(--tg-border-strong)' }} />
+                        {step.caption && <figcaption className="text-[12px] leading-snug mt-1.5 text-tg-hint">{step.caption}</figcaption>}
+                      </figure>
+                    )}
+                    {step.warn && (
+                      <p className="card p-3 border-l-4 rounded-l-none text-[13px] leading-snug font-medium"
+                        style={{ borderLeftColor: '#E5484D', color: 'var(--tg-text)' }}>
+                        {step.warn}
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
             ))}
@@ -730,15 +772,19 @@ function LessonPostBody({ p }: { p: Post }) {
   )
 }
 
-function PostView({ folderId, postId, onBack }: { folderId: string; postId: string; onBack: () => void }) {
+function PostView({ folderId, postId, onBack, onOpenPost }: { folderId: string; postId: string; onBack: () => void; onOpenPost: (postId: string) => void }) {
   const f = folders.find(x => x.id === folderId)!
   const p = f.posts.find(x => x.id === postId)!
   const tgLink = p.tgUrl || tgUrlFor(f.tgChannel)
   const isLesson = !!(p.timecodes || p.goal || p.steps || p.services || p.repos)
+  const lessonIndex = f.course ? f.posts.findIndex(x => x.id === postId) : -1
+  const nextLesson = lessonIndex >= 0 ? f.posts[lessonIndex + 1] : undefined
+
+  useEffect(() => { if (f.course) window.scrollTo(0, 0) }, [f.course, postId])
 
   return (
     <>
-      <Header title={f.title} subtitle={p.date} onBack={onBack} />
+      <Header title={f.title} subtitle={f.course ? `Урок ${lessonIndex + 1} из ${COURSE_TOTAL}` : p.date} onBack={onBack} />
       <div className="px-5 py-6 pb-24 fade-up">
         <div className="flex items-center gap-2 mb-3 text-[10px] font-mono uppercase tracking-[0.2em]">
           <span style={{ color: 'var(--tg-accent)' }}>{TYPE_LABEL[p.type]}</span>
@@ -747,6 +793,24 @@ function PostView({ folderId, postId, onBack }: { folderId: string; postId: stri
         <h1 className="font-display font-bold text-[26px] leading-[1.05] mb-6 uppercase tracking-wide">{p.title}</h1>
 
         <LessonPostBody p={p} />
+
+        {f.course && (
+          <div className="mt-8">
+            <div className="h-1.5 rounded-full overflow-hidden mb-2" style={{ background: 'var(--tg-border)' }}>
+              <div className="h-full rounded-full" style={{ width: `${((lessonIndex + 1) / COURSE_TOTAL) * 100}%`, background: 'var(--tg-accent)' }} />
+            </div>
+            <p className="text-[12px] text-tg-hint mb-4">Урок {lessonIndex + 1} из {COURSE_TOTAL}</p>
+            {nextLesson ? (
+              <button onClick={() => onOpenPost(nextLesson.id)}
+                className="w-full py-3.5 px-4 rounded-lg font-display font-bold text-[14px] active:scale-[0.98] transition"
+                style={{ background: 'var(--tg-accent)', color: '#060709' }}>
+                Следующий урок: {nextLesson.title}
+              </button>
+            ) : (
+              <p className="card p-4 text-[14px] leading-snug" style={{ color: 'var(--tg-text)' }}>Следующий урок скоро появится.</p>
+            )}
+          </div>
+        )}
 
         {p.fileUrl && (
           <div className="card p-4 my-6 flex items-center gap-3">
@@ -767,7 +831,7 @@ function PostView({ folderId, postId, onBack }: { folderId: string; postId: stri
           </div>
         )}
 
-        {!isLesson && (
+        {!isLesson && !f.course && (
           <button
             onClick={() => openTgLink(tgLink)}
             className="w-full py-3.5 rounded-lg font-display font-bold text-[13px] uppercase tracking-[0.16em] active:scale-[0.98] transition flex items-center justify-center gap-2 mt-4 border-2"
@@ -956,7 +1020,8 @@ export function App() {
     if (view.kind === 'home') return <HomeView onOpen={handleOpenFolder} />
     if (view.kind === 'folder') return <FolderView folderId={view.folderId} onBack={() => setView({ kind: 'home' })}
       onOpen={(postId) => handleOpenPost(view.folderId, postId)} />
-    return <PostView folderId={view.folderId} postId={view.postId} onBack={() => setView({ kind: 'folder', folderId: view.folderId })} />
+    return <PostView folderId={view.folderId} postId={view.postId} onBack={() => setView({ kind: 'folder', folderId: view.folderId })}
+      onOpenPost={(postId) => handleOpenPost(view.folderId, postId)} />
   }, [tab, view])
 
   return (

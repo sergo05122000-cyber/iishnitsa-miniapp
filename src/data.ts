@@ -1,5 +1,16 @@
+import { ownAgentFolder } from './course'
+
 export type LessonTimecode = { time: string; text: string }
-export type LessonStep = { text: string; command?: string }
+export type LessonStep = {
+  text: string
+  title?: string
+  command?: string
+  commandWin?: string  // отдельная команда для Windows, если отличается от Mac
+  prompt?: string
+  image?: string
+  caption?: string
+  warn?: string
+}
 export type LessonService = { name: string; desc: string; url?: string }
 export type LessonRepo = { name: string; url: string }
 
@@ -32,6 +43,7 @@ export type Folder = {
   count: number
   accent: string
   closed?: boolean
+  course?: boolean  // уроки идут по порядку, внизу кнопка следующего урока
   tgChannel?: string  // username канала без @
   posts: Post[]
 }
@@ -57,9 +69,10 @@ const BASE = '/'
 const asset = (p: string) => `${BASE}${p}`
 
 export const channelName = 'ИИшница'
-export const channelSubtitle = '8 разделов клуба'
+export const channelSubtitle = '9 разделов клуба'
 
 export const folders: Folder[] = [
+  ownAgentFolder,
   {
     id: 'chat', icon: 'message', title: 'Жила была', subtitle: 'Открытый чат клуба',
     count: 0, accent: 'from-sky-400 to-blue-500',
