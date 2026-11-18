@@ -2,33 +2,43 @@
 @tailwind components;
 @tailwind utilities;
 
-/* === Cinematic Dark Premium — единая тема === */
-:root, .tg-dark {
-  /* Scroll-driven accent — JS lerps these gold->cyan as you scroll. */
-  --accent-rgb: 229, 178, 71;
-  --accent-bright-rgb: 255, 210, 122;
-  --tg-bg: #060709;          /* deepest void */
-  --tg-sec: #0E1014;         /* card surface */
-  --tg-sec-2: #14171D;       /* elevated surface */
-  --tg-text: #E8DFC8;        /* warm cream */
-  --tg-hint: #7D7A6F;        /* muted gold-grey */
-  --tg-link: rgb(var(--accent-rgb));        /* warm gold */
-  --tg-btn: rgb(var(--accent-rgb));
-  --tg-border: rgba(var(--accent-rgb),0.10);
-  --tg-border-strong: rgba(var(--accent-rgb),0.22);
-  --tg-card-shadow: 0 12px 40px -16px rgba(var(--accent-rgb),0.10), 0 1px 0 rgba(255,255,255,0.02) inset;
+/* Минималистичная тема: светлая и тёмная по настройке Telegram */
+:root {
+  --accent-rgb: 158, 100, 0;
+  --accent-bright-rgb: 158, 100, 0;
+  --tg-bg: #FAFAF8;
+  --tg-sec: #FFFFFF;
+  --tg-sec-2: #F2F2EF;
+  --tg-text: #171717;
+  --tg-hint: #6B6B66;
+  --tg-link: rgb(var(--accent-rgb));
+  --tg-btn: #171717;
+  --tg-on-accent: #FFFFFF;
+  --tg-border: rgba(23, 23, 23, 0.09);
+  --tg-border-strong: rgba(23, 23, 23, 0.16);
+  --tg-card-shadow: none;
   --tg-accent: rgb(var(--accent-rgb));
-  --tg-accent-bright: rgb(var(--accent-bright-rgb));
-  --tg-accent-soft: rgba(var(--accent-rgb),0.14);
-  /* Secondary accent — interactive/action elements (icons, CTA, active tab).
-     Gold stays brand/identity; this colour signals "tappable" so cards stop
-     blending while scrolling. Swap this one line to compare Vladimir's options:
-     #06B6D4 cyan (current) · #8B5CF6 violet · #10B981 emerald */
-  --tg-icon: rgb(var(--accent-rgb));
-  --tg-glow: 0 0 24px rgba(var(--accent-rgb),0.35);
-  --tg-glow-soft: 0 0 40px rgba(var(--accent-rgb),0.18);
-  --tg-locked-bg: rgba(255,255,255,0.02);
-  --tg-locked-text: rgba(232,223,200,0.30);
+  --tg-accent-bright: rgb(var(--accent-rgb));
+  --tg-accent-soft: rgba(var(--accent-rgb), 0.10);
+  --tg-icon: var(--tg-text);
+  --tg-glow: none;
+  --tg-glow-soft: none;
+  --tg-locked-bg: transparent;
+  --tg-locked-text: rgba(23, 23, 23, 0.40);
+}
+.tg-dark {
+  --accent-rgb: 240, 180, 60;
+  --accent-bright-rgb: 240, 180, 60;
+  --tg-bg: #111111;
+  --tg-sec: #1A1A1A;
+  --tg-sec-2: #232323;
+  --tg-text: #EDEDEA;
+  --tg-hint: #9C9C96;
+  --tg-btn: #EDEDEA;
+  --tg-on-accent: #111111;
+  --tg-border: rgba(255, 255, 255, 0.09);
+  --tg-border-strong: rgba(255, 255, 255, 0.18);
+  --tg-locked-text: rgba(237, 237, 234, 0.40);
 }
 
 html, body, #root { height: 100%; }
@@ -37,223 +47,30 @@ body {
   -webkit-font-smoothing: antialiased;
   background: var(--tg-bg);
   color: var(--tg-text);
-  font-feature-settings: "ss01", "cv11";
 }
 
-/* Subtle grain — добавляет премиум-текстуру */
-body::after {
-  content: '';
-  position: fixed; inset: 0;
-  pointer-events: none;
-  z-index: 9998;
-  opacity: 0.04;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-.font-display { font-family: 'Bricolage Grotesque', 'Manrope', sans-serif; letter-spacing: -0.02em; font-weight: 800; }
+.font-display { font-family: 'Manrope', -apple-system, system-ui, sans-serif; letter-spacing: -0.02em; font-weight: 700; }
 .font-mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
 
 .card {
   background: var(--tg-sec);
   border: 1px solid var(--tg-border);
-  border-radius: 16px;
-  box-shadow: var(--tg-card-shadow);
+  border-radius: 14px;
   position: relative;
-}
-/* Тонкая золотая линия сверху — luxury detail */
-.card::before {
-  content: '';
-  position: absolute;
-  top: -1px; left: 16px; right: 16px;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(var(--accent-rgb),0.18), transparent);
-  pointer-events: none;
 }
 .divider { border-color: var(--tg-border); }
-
-/* Hero -- мягкий золотой фон без сетки */
-.hero-bg {
-  background:
-    radial-gradient(ellipse 70% 90% at 50% 100%, rgba(var(--accent-rgb),0.18) 0%, transparent 60%),
-    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(var(--accent-rgb),0.05) 0%, transparent 60%),
-    linear-gradient(180deg, #060709 0%, #0A0C10 100%);
-  position: relative; overflow: hidden;
-}
-
-.glow { box-shadow: var(--tg-glow); }
-.glow-soft { box-shadow: var(--tg-glow-soft); }
-.text-glow { text-shadow: 0 0 18px rgba(var(--accent-rgb),0.55); }
-
-/* === Усиленный неон-стек === */
-.text-glow-strong {
-  text-shadow:
-    0 0 8px rgba(var(--accent-rgb),0.65),
-    0 0 22px rgba(var(--accent-rgb),0.45),
-    0 0 44px rgba(var(--accent-rgb),0.22);
-}
-.title-outline {
-  -webkit-text-stroke: 1.2px #FFD27A;
-  text-stroke: 1.2px #FFD27A;
-  paint-order: stroke fill;
-}
-.neon-text {
-  text-shadow:
-    0 0 6px rgba(var(--accent-rgb),0.55),
-    0 0 16px rgba(var(--accent-rgb),0.32);
-}
-.neon-text-soft {
-  text-shadow: 0 0 10px rgba(232,223,200,0.18);
-}
-.neon-border {
-  position: relative;
-}
-
-/* === Welcome guide card === */
-@keyframes welcomeGlow {
-  0%, 100% { box-shadow: var(--tg-card-shadow), 0 0 0 rgba(var(--accent-rgb),0); }
-  50% { box-shadow: var(--tg-card-shadow), 0 0 26px -4px rgba(var(--accent-rgb),0.22); }
-}
-.welcome-glow { animation: welcomeGlow 5s ease-in-out infinite; }
-.welcome-step:hover { border-color: rgba(var(--accent-rgb),0.42) !important; }
-
-/* === Сцена со сковородой === */
-
-/* рука покачивает сковородку */
-@keyframes panShake {
-  0%, 100% { transform: translate(0,0) rotate(0deg); }
-  20% { transform: translate(-1.5px,0.5px) rotate(-1deg); }
-  50% { transform: translate(1px,-0.5px) rotate(0.8deg); }
-  80% { transform: translate(-0.8px,0.3px) rotate(-0.6deg); }
-}
-.pan-group { transform-origin: 260px 200px; animation: panShake 2.8s ease-in-out infinite; }
-
-/* желток пульсирует */
-@keyframes yolkBreath {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-}
-.yolk-main, .yolk-small {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: yolkBreath 2.2s ease-in-out infinite;
-}
-.yolk-small { animation-duration: 2.6s; animation-delay: 0.4s; }
-
-/* аура желтка дышит */
-@keyframes auraPulse {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
-}
-.yolk-aura { animation: auraPulse 2.4s ease-in-out infinite; }
-
-/* неоновый обод сковороды */
-@keyframes panRimGlow {
-  0%, 100% { filter: drop-shadow(0 0 4px rgba(var(--accent-rgb),0.4)); }
-  50% { filter: drop-shadow(0 0 12px rgba(var(--accent-rgb),0.75)); }
-}
-.pan-glow { animation: panRimGlow 3s ease-in-out infinite; }
-
-/* пар поднимается и тает */
-@keyframes steamRise {
-  0% { opacity: 0; transform: translateY(20px) scaleY(0.4); }
-  20% { opacity: 0.6; }
-  100% { opacity: 0; transform: translateY(-30px) scaleY(1.2); }
-}
-.steam { transform-origin: bottom center; animation: steamRise 3.2s ease-in-out infinite; }
-.steam-a { animation-delay: 0s; }
-.steam-b { animation-delay: 0.7s; }
-.steam-c { animation-delay: 1.4s; }
-
-/* пузырьки — pop-in / pop-out */
-@keyframes bubblePop {
-  0%, 100% { opacity: 0; transform: scale(0.3); }
-  30% { opacity: 1; transform: scale(1.1); }
-  60% { opacity: 0.6; transform: scale(0.8); }
-}
-.bubble { transform-box: fill-box; transform-origin: center; animation: bubblePop 1.8s ease-in-out infinite; }
-.bubble-a { animation-delay: 0s; }
-.bubble-b { animation-delay: 0.3s; }
-.bubble-c { animation-delay: 0.7s; }
-.bubble-d { animation-delay: 1s; }
-.bubble-e { animation-delay: 1.4s; }
+.card-number { display: none; }
+.card-locked { opacity: 0.5; }
 
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(8px); }
+  from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }
 }
-.fade-up { animation: fadeUp 0.5s cubic-bezier(0,0,0.2,1) both; }
-
-@keyframes pulseDot {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(1.4); }
-}
-.pulse-dot { animation: pulseDot 1.8s ease-in-out infinite; }
-
-@keyframes scanline {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
-
-/* === Живые карточки разделов === */
-
-/* Shimmer-блик по диагонали — пробегает раз в ~7 сек */
-@keyframes cardShimmer {
-  0% { transform: translate(-120%, -120%) rotate(35deg); opacity: 0; }
-  10% { opacity: 0.55; }
-  50% { opacity: 0.55; }
-  60% { transform: translate(120%, 120%) rotate(35deg); opacity: 0; }
-  100% { transform: translate(120%, 120%) rotate(35deg); opacity: 0; }
-}
-
-/* Border-glow — золотая граница "дышит" */
-@keyframes borderGlow {
-  0%, 100% { box-shadow: var(--tg-card-shadow), 0 0 0 rgba(var(--accent-rgb),0); }
-  50% { box-shadow: var(--tg-card-shadow), 0 0 22px -4px rgba(var(--accent-rgb),0.22); }
-}
-
-/* Icon-float — плавный вертикальный дрейф */
-@keyframes iconFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-2px); }
-}
-
-/* Locked breath — медленное приглушённое дыхание */
-@keyframes lockedBreath {
-  0%, 100% { opacity: 0.42; }
-  50% { opacity: 0.58; }
-}
-
-/* Number glow — мерцание цифры 01-07 */
-@keyframes numberGlow {
-  0%, 100% { opacity: 0.55; text-shadow: 0 0 0 rgba(var(--accent-rgb),0); }
-  50% { opacity: 1; text-shadow: 0 0 12px rgba(var(--accent-rgb),0.45); }
-}
-
-.card-live {
-  animation: borderGlow 5.5s ease-in-out infinite;
-}
-.card-live::after {
-  content: '';
-  position: absolute;
-  inset: -50%;
-  width: 60%;
-  height: 220%;
-  background: linear-gradient(90deg, transparent 0%, rgba(var(--accent-rgb),0.18) 50%, transparent 100%);
-  filter: blur(8px);
-  pointer-events: none;
-  animation: cardShimmer 7s ease-in-out infinite;
-  animation-delay: var(--shimmer-delay, 0s);
-}
-.card-live .card-icon { animation: iconFloat 4s ease-in-out infinite; }
-.card-live .card-number { animation: numberGlow 5s ease-in-out infinite; }
-
-.card-locked {
-  animation: lockedBreath 6s ease-in-out infinite !important;
-}
+.fade-up { animation: fadeUp 0.22s ease-out both; }
 
 ::-webkit-scrollbar { width: 0; display: none; }
 * { -webkit-tap-highlight-color: transparent; }
 
 @media (prefers-reduced-motion: reduce) {
-  .card-live, .card-live::after, .card-live .card-icon, .card-live .card-number, .card-locked, .pulse-dot { animation: none !important; }
+  .fade-up { animation: none; }
 }

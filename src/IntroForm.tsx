@@ -132,10 +132,10 @@ export function IntroForm({ open, onClose }: Props) {
         ref={sheetRef}
         className="fixed left-0 right-0 bottom-0 z-[81] flex flex-col"
         style={{
-          background: 'linear-gradient(180deg, #0F1014 0%, #060709 100%)',
+          background: 'var(--tg-sec)',
           borderTop: '1px solid rgba(229,178,71,0.22)',
           borderRadius: '20px 20px 0 0',
-          boxShadow: '0 -20px 60px rgba(0,0,0,0.6), 0 -1px 0 rgba(229,178,71,0.1)',
+          boxShadow: 'none',
           maxHeight: '92vh',
           transform: open ? 'translateY(0)' : 'translateY(100%)',
           transition: 'transform 360ms cubic-bezier(0.22, 1, 0.36, 1)',
@@ -152,10 +152,10 @@ export function IntroForm({ open, onClose }: Props) {
             <SuccessScreen name={name} />
           ) : (
             <>
-              <div className="font-mono text-[10px] uppercase tracking-[0.3em] mb-2" style={{ color: 'var(--tg-accent)' }}>
+              <div className="text-[12px] mb-2" style={{ color: 'var(--tg-accent)' }}>
                 Знакомства · Анкета
               </div>
-              <h2 className="font-display font-bold text-[24px] leading-tight mb-1" style={{ color: 'var(--tg-text)', letterSpacing: '-0.02em' }}>
+              <h2 className="font-display font-bold text-[24px] leading-tight mb-1" style={{ color: 'var(--tg-text)', }}>
                 Расскажи о себе
               </h2>
               <p className="text-[12px] leading-relaxed mb-5" style={{ color: 'var(--tg-hint)' }}>
@@ -198,12 +198,12 @@ export function IntroForm({ open, onClose }: Props) {
                     <button
                       key={l}
                       onClick={() => { setLevel(l); haptic('light') }}
-                      className="flex-1 py-2.5 px-2 rounded-lg text-[12px] font-mono uppercase tracking-wider transition-all"
+                      className="flex-1 py-2.5 px-2 rounded-lg text-[12px] transition-all"
                       style={{
-                        background: level === l ? 'rgba(229,178,71,0.18)' : 'rgba(255,255,255,0.03)',
-                        border: `1px solid ${level === l ? 'var(--tg-accent)' : 'rgba(255,255,255,0.08)'}`,
+                        background: level === l ? 'var(--tg-accent-soft)' : 'transparent',
+                        border: `1px solid ${level === l ? 'var(--tg-accent)' : 'var(--tg-border-strong)'}`,
                         color: level === l ? 'var(--tg-accent)' : 'var(--tg-hint)',
-                        boxShadow: level === l ? '0 0 12px rgba(229,178,71,0.15)' : 'none',
+                        boxShadow: 'none',
                       }}
                     >
                       {LEVEL_LABELS[l]}
@@ -232,11 +232,11 @@ export function IntroForm({ open, onClose }: Props) {
                 <button
                   onClick={onClose}
                   disabled={sending}
-                  className="flex-1 py-3.5 rounded-lg font-display font-bold text-[13px] uppercase tracking-wide transition-colors"
+                  className="flex-1 py-3.5 rounded-lg font-display font-bold text-[13px] transition-colors"
                   style={{
                     background: 'transparent',
                     color: 'var(--tg-hint)',
-                    border: '1px solid rgba(255,255,255,0.08)',
+                    border: '1px solid var(--tg-border-strong)',
                   }}
                 >
                   Отмена
@@ -244,18 +244,18 @@ export function IntroForm({ open, onClose }: Props) {
                 <button
                   onClick={handleSubmit}
                   disabled={sending}
-                  className="flex-[1.5] py-3.5 rounded-lg font-display font-bold text-[13px] uppercase tracking-wide transition-all"
+                  className="flex-[1.5] py-3.5 rounded-lg font-display font-bold text-[13px] transition-all"
                   style={{
                     background: sending ? 'rgba(229,178,71,0.25)' : 'var(--tg-accent)',
-                    color: '#0a0a0a',
-                    boxShadow: sending ? 'none' : '0 4px 18px rgba(229,178,71,0.35)',
+                    color: 'var(--tg-on-accent)',
+                    boxShadow: 'none',
                   }}
                 >
                   {sending ? 'Отправляю…' : 'Отправить анкету'}
                 </button>
               </div>
 
-              <div className="mt-4 text-center font-mono text-[9px] uppercase tracking-[0.18em]" style={{ color: 'var(--tg-hint)' }}>
+              <div className="mt-4 text-center text-[12px]" style={{ color: 'var(--tg-hint)' }}>
                 Анкета уходит лично Серёге
               </div>
             </>
@@ -266,8 +266,8 @@ export function IntroForm({ open, onClose }: Props) {
       <style>{`
         .input {
           width: 100%;
-          background: rgba(255,255,255,0.03);
-          border: 1px solid rgba(255,255,255,0.08);
+          background: var(--tg-bg);
+          border: 1px solid var(--tg-border-strong);
           border-radius: 10px;
           padding: 12px 14px;
           color: var(--tg-text);
@@ -276,7 +276,7 @@ export function IntroForm({ open, onClose }: Props) {
           outline: none;
           transition: border-color 0.2s, background 0.2s;
         }
-        .input::placeholder { color: rgba(232,223,200,0.3); }
+        .input::placeholder { color: var(--tg-hint); }
         .input:focus {
           border-color: var(--tg-accent);
           background: rgba(229,178,71,0.04);
@@ -289,7 +289,7 @@ export function IntroForm({ open, onClose }: Props) {
 function Field({ label, required, children }: { label: string; required?: boolean; children: React.ReactNode }) {
   return (
     <div className="mb-3">
-      <label className="block font-mono text-[10px] uppercase tracking-[0.18em] mb-1.5" style={{ color: 'var(--tg-hint)' }}>
+      <label className="block text-[12px] mb-1.5" style={{ color: 'var(--tg-hint)' }}>
         {label}{required && <span style={{ color: 'var(--tg-accent)' }}> *</span>}
       </label>
       {children}
@@ -304,13 +304,13 @@ function SuccessScreen({ name }: { name: string }) {
         style={{
           background: 'rgba(229,178,71,0.12)',
           border: '1.5px solid var(--tg-accent)',
-          boxShadow: '0 0 30px rgba(229,178,71,0.25)',
+          boxShadow: 'none',
         }}>
         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--tg-accent)' }}>
           <polyline points="20 6 9 17 4 12"/>
         </svg>
       </div>
-      <h2 className="font-display font-bold text-[24px] mb-2" style={{ color: 'var(--tg-accent)', letterSpacing: '-0.02em' }}>
+      <h2 className="font-display font-bold text-[24px] mb-2" style={{ color: 'var(--tg-accent)', }}>
         Готово{name ? `, ${name.split(' ')[0]}` : ''}!
       </h2>
       <p className="text-[13px] leading-relaxed" style={{ color: 'var(--tg-hint)' }}>
